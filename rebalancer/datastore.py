@@ -89,11 +89,13 @@ class Bib(Base):
     __tablename__ = 'bib'
     sid = Column(Integer, primary_key=True, autoincrement=False)
     matcat_id = Column(Integer, ForeignKey('mat_cat.sid'), nullable=False)
+    audn = Column(String(1), default='a')
+    lang = Column(String(3), default='eng')
     author = Column(String(100))
     title = Column(String(150), nullable=False)
     pub_info = Column(String(150))
     call_no = Column(String(150))
-    subjects = Column(String(500))
+    subject = Column(String(500))
     rating = Column(Float)
 
     items = relationship(
