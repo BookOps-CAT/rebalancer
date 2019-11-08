@@ -31,9 +31,12 @@ import csv
 import re
 
 
-from datastore import session_scope, Branch, Bib, Item, Shelf, Status
+from datastore import session_scope, Bib, Item, ItemType, Status
 from datastore_transactions import insert_or_ignore
+from data.audiences import AUDN_CODES
+from data.branches import BRANCH_CODES
 from data.languages import LANG_CODES
+from data.categories import REBALANCE_CATS
 
 
 RowData = namedtuple(
@@ -43,12 +46,12 @@ RowData = namedtuple(
 
 BibData = namedtuple(
     'BibData',
-    'bid, author, title, pub_info, call_no, subject, mat_cat, '
-    'audn, lang')
+    'sid, author, title, pub_info, call_no, subject, mat_cat_id, '
+    'audn_id, lang_id')
 
 ItemData = namedtuple(
     'ItemData',
-    'iid, bid, branch, status, item_type, checkouts, last_checkout')
+    'sid, bid, branch_id, status_id, item_type_id, checkouts, last_checkout')
 
 
 CALL_PATTERNS = OrderedDict(
@@ -96,8 +99,13 @@ def determine_mat_category(call_no):
             return p
 
 
-def determine_audience(location):
-    return location[2]
+def determine_audience_id(location):
+    try:
+        audn_id = AUDN_CODES[location[2]][0]
+    except KeyError:
+        # eng code id is 4
+        audn_id = 4
+    return audn_id
 
 
 def determine_language(call_no):
@@ -123,7 +131,7 @@ def normalize_date(date_string):
         return date_string[:10]
 
 
-def export_reader(fh):
+def sierra_export_reader(fh):
     reader = csv.reader(
         open(fh, 'r', encoding='utf-8', newline=''),
         delimiter='^',
@@ -137,26 +145,34 @@ def export_reader(fh):
 
 
 def save2store(fh):
-    data = export_reader(fh)
-    for element in data:
-        bib = BibData(
-            bid=prep_ids(element.bid),
-            author=element.author,
-            title=find_nth_value(element.title, -1),
-            pub_info=find_nth_value(element.pub_info, 0),
-            subject=find_nth_value(element.subject, 0),
-            call_no=find_nth_value(element.call_no, 0),  # branch call number will always be first if present
-            mat_cat=determine_mat_category(element.call_no),
-            audn=determine_audience(element.location),
-            lang=determine_language(element.call_no)
-        )
+    data = sierra_export_reader(fh)
+    with session_scope() as session:
+        for element in data:
+            bib = BibData(
+                sid=prep_ids(element.bid),
+                author=element.author,
+                title=find_nth_value(element.title, -1),
+                pub_info=find_nth_value(element.pub_info, 0),
+                subject=find_nth_value(element.subject, 0),
+                call_no=find_nth_value(element.call_no, 0),
+                mat_cat_id=REBALANCE_CATS[
+                    determine_mat_category(element.call_no)][0],
+                audn_id=determine_audience_id(element.location),
+                lang_id=LANG_CODES[determine_language(element.call_no)][0]
+            )
 
-        item = ItemData(
-            iid=prep_ids(element.iid),
-            bid=prep_ids(element.bid),
-            branch=determine_branch(element.location),
-            status=element.status,
-            item_type=element.item_type,
-            checkouts=int(element.checkouts),
-            last_checkout=normalize_date(element.last_checkout))
+            item = ItemData(
+                sid=prep_ids(element.iid),
+                bid=prep_ids(element.bid),
+                branch_id=determine_branch(element.location),
+                status_id=element.status,
+                item_type_id=element.item_type,
+                checkouts=int(element.checkouts),
+                last_checkout=normalize_date(element.last_checkout))
+
+
+            res = insert_or_ignore(
+                session,
+                Bib,
+                **bib._asdict())
 
