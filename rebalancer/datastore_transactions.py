@@ -3,6 +3,13 @@ Datastore transaction methods
 """
 
 
+def insert(session, model, **kwargs):
+    instance = model(**kwargs)
+    session.add(instance)
+    session.flush()
+    return instance
+
+
 def insert_or_ignore(session, model, **kwargs):
     instance = session.query(model).filter_by(**kwargs).first()
     if not instance:
