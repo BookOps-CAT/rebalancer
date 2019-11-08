@@ -13,9 +13,29 @@ from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
 
 
+from data.branches import BRANCH_CODES
+from data.audiences import AUDN_CODES
+from data.languages import LANG_CODES
+from data.categories import REBALANCE_CATS
+from datastore_transactions import insert
+
+
 Base = declarative_base()
 
 DB_FH = './temp/store.db'
+
+
+class Audience(Base):
+    __tablename__ = 'audience'
+    sid = Column(Integer, primary_key=True, autoincrement=False)
+    code = Column(String(1), nullable=False, unique=True)
+    label = Column(String(50))
+
+    def __repr__(self):
+        state = inspect(self)
+        attrs = ', '.join([
+            f'{attr.key}={attr.loaded_value!r}' for attr in state.attrs])
+        return f'<Audience({attrs})>'
 
 
 class Branch(Base):
@@ -29,6 +49,19 @@ class Branch(Base):
         attrs = ', '.join([
             f'{attr.key}={attr.loaded_value!r}' for attr in state.attrs])
         return f'<Branch({attrs})>'
+
+
+class Language(Base):
+    __tablename__ = 'language'
+    sid = Column(Integer, primary_key=True)
+    code = Column(String(3), nullable=False, unique=True, default='eng')
+    label = Column(String(50))
+
+    def __repr__(self):
+        state = inspect(self)
+        attrs = ', '.join([
+            f'{attr.key}={attr.loaded_value!r}' for attr in state.attrs])
+        return f'<Language({attrs})>'
 
 
 class Shelf(Base):
@@ -88,9 +121,11 @@ class MatCat(Base):
 class Bib(Base):
     __tablename__ = 'bib'
     sid = Column(Integer, primary_key=True, autoincrement=False)
-    matcat_id = Column(Integer, ForeignKey('mat_cat.sid'), nullable=False)
-    audn = Column(String(1), default='a')
-    lang = Column(String(3), default='eng')
+    mat_cat_id = Column(Integer, ForeignKey('mat_cat.sid'), nullable=False)
+    audn_id = Column(
+        Integer, ForeignKey('audience.sid'), nullable=False, default=1)
+    lang_id = Column(
+        Integer, ForeignKey('language.sid'), nullable=False, default=4)
     author = Column(String(100))
     title = Column(String(150), nullable=False)
     pub_info = Column(String(150))
@@ -180,6 +215,29 @@ def create_datastore():
     conn.close()
     engine = create_engine(f'sqlite:///{DB_FH}')
     Base.metadata.create_all(engine)
+
+    with session_scope() as session:
+        for code, values in AUDN_CODES.items():
+            insert(
+                session, Audience, sid=values[0], code=code, label=values[1])
+
+        for code, values in LANG_CODES.items():
+            insert(
+                session,
+                Language,
+                sid=values[0], code=code, label=values[1])
+
+        for code, values in BRANCH_CODES.items():
+            insert(
+                session,
+                Branch,
+                sid=values[0], code=code, label=values[1])
+
+        for code, values in REBALANCE_CATS.items():
+            insert(
+                session,
+                MatCat,
+                sid=values[0], code=code, label=values[1])
 
 
 if __name__ == '__main__':
