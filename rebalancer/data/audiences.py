@@ -1,5 +1,6 @@
 AUDN_CODES = {
-    'a': (1, 'adult'),
-    'j': (2, 'juvenile'),
-    'y': (3, 'young adult')
+    None: (1, 'Error'),
+    'a': (2, 'Adult'),
+    'j': (3, 'Juvenile'),
+    'y': (4, 'Young adult')
 }
