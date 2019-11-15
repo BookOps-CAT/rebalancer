@@ -28,15 +28,17 @@ note: call numbers may repeat (branch-research) and only branch ones should be
 
 from collections import namedtuple, OrderedDict
 import csv
+from datetime import datetime
 import re
 
 
-from datastore import session_scope, Bib, Item, ItemType, Status
-from datastore_transactions import insert_or_ignore
+from datastore import session_scope, Bib, Item, ItemType, Status, Shelf, Hold
+from datastore_transactions import (insert, insert_or_ignore, insert_or_update, retrieve_record)
 from data.audiences import AUDN_CODES
 from data.branches import BRANCH_CODES
 from data.languages import LANG_CODES
 from data.categories import REBALANCE_CATS
+from data.status import STATUS_CODES
 
 
 RowData = namedtuple(
@@ -51,7 +53,8 @@ BibData = namedtuple(
 
 ItemData = namedtuple(
     'ItemData',
-    'sid, bid, branch_id, status_id, item_type_id, checkouts, last_checkout')
+    'sid, bib_id, status_id, item_type_id, checkouts, '
+    'last_checkout')
 
 
 CALL_PATTERNS = OrderedDict(
@@ -84,7 +87,7 @@ CALL_PATTERNS = OrderedDict(
 
 
 def prep_ids(sierra_id):
-    return sierra_id[1:-1]
+    return int(sierra_id[1:-1])
 
 
 def find_nth_value(field, n):
@@ -120,15 +123,62 @@ def determine_language(call_no):
         return 'eng'
 
 
-def determine_branch(location):
-    return location[:2].lower()
+def determine_branch_id(location):
+    code = location[:2].lower()
+    if code in BRANCH_CODES.keys():
+        return BRANCH_CODES[code][0]
+    else:
+        return BRANCH_CODES[None][0]
 
 
 def normalize_date(date_string):
     if date_string[0] == ' ':
         return None
     else:
-        return date_string[:10]
+        return datetime.strptime(date_string[:10], '%m-%d-%Y')
+
+
+def determine_status_id(code):
+    if code in STATUS_CODES.keys():
+        return STATUS_CODES[code][0]
+    else:
+        return STATUS_CODES[None][0]
+
+
+def determine_item_type_id(session, code):
+    res = retrieve_record(
+        session,
+        ItemType,
+        code=code.strip())
+
+    if res:
+        item_type_id = res.sid
+    else:
+        res = insert_or_ignore(
+            session,
+            ItemType,
+            code=code.strip())
+        session.flush()
+        item_type_id = res.sid
+
+    return item_type_id
+
+
+def determine_shelf_id(session, location):
+    code = location[2:].strip()
+    res = retrieve_record(
+        session,
+        Shelf,
+        code=code)
+    if res:
+        return res.sid
+    else:
+        res = insert_or_ignore(
+            session,
+            Shelf,
+            code=code)
+        session.flush()
+        return res.sid
 
 
 def sierra_export_reader(fh):
@@ -163,16 +213,26 @@ def save2store(fh):
 
             item = ItemData(
                 sid=prep_ids(element.iid),
-                bid=prep_ids(element.bid),
-                branch_id=determine_branch(element.location),
-                status_id=element.status,
-                item_type_id=element.item_type,
+                bib_id=prep_ids(element.bid),
+                # shelf_id=determine_shelf_id(element.location),
+                status_id=determine_status_id(element.status),
+                item_type_id=determine_item_type_id(
+                    session, element.item_type),
                 checkouts=int(element.checkouts),
                 last_checkout=normalize_date(element.last_checkout))
 
-
-            res = insert_or_ignore(
+            insert_or_update(
                 session,
                 Bib,
                 **bib._asdict())
 
+            insert_or_update(
+                session,
+                Item,
+                **item._asdict())
+
+            insert(
+                session,
+                Hold,
+                item_id=item.sid,
+                src_branch_id=determine_branch_id(element.location))
