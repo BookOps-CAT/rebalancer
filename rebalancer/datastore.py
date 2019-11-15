@@ -17,6 +17,7 @@ from data.branches import BRANCH_CODES
 from data.audiences import AUDN_CODES
 from data.languages import LANG_CODES
 from data.categories import REBALANCE_CATS
+from data.status import STATUS_CODES
 from datastore_transactions import insert
 
 
@@ -28,7 +29,7 @@ DB_FH = './temp/store.db'
 class Audience(Base):
     __tablename__ = 'audience'
     sid = Column(Integer, primary_key=True, autoincrement=False)
-    code = Column(String(1), nullable=False, unique=True)
+    code = Column(String(1), unique=True)
     label = Column(String(50))
 
     def __repr__(self):
@@ -41,7 +42,7 @@ class Audience(Base):
 class Branch(Base):
     __tablename__ = 'branch'
     sid = Column(Integer, primary_key=True)
-    code = Column(String(2), nullable=False, unique=True)
+    code = Column(String(2), unique=True)
     label = Column(String(100))
 
     def __repr__(self):
@@ -54,7 +55,7 @@ class Branch(Base):
 class Language(Base):
     __tablename__ = 'language'
     sid = Column(Integer, primary_key=True)
-    code = Column(String(3), nullable=False, unique=True, default='eng')
+    code = Column(String(3), unique=True)
     label = Column(String(50))
 
     def __repr__(self):
@@ -67,7 +68,7 @@ class Language(Base):
 class Shelf(Base):
     __tablename__ = 'shelf'
     sid = Column(Integer, primary_key=True)
-    code = Column(String(5), nullable=False, unique=True)
+    code = Column(String(5), unique=True)
     label = Column(String(50))
     linear_feet = Column(Float)
     est_items = Column(Integer)
@@ -82,7 +83,7 @@ class Shelf(Base):
 class Status(Base):
     __tablename__ = 'status'
     sid = Column(Integer, primary_key=True)
-    code = Column(String(1), nullable=False, unique=True)
+    code = Column(String(1), unique=True)
     label = Column(String(50))
 
     def __repr__(self):
@@ -95,7 +96,7 @@ class Status(Base):
 class ItemType(Base):
     __tablename__ = 'item_type'
     sid = Column(Integer, primary_key=True)
-    code = Column(String(3), nullable=False, unique=True)
+    code = Column(String(3), unique=True)
     label = Column(String(75))
 
     def __repr__(self):
@@ -108,7 +109,7 @@ class ItemType(Base):
 class MatCat(Base):
     __tablename__ = 'mat_cat'
     sid = Column(Integer, primary_key=True)
-    code = Column(String(2), nullable=False, unique=True)
+    code = Column(String(2), unique=True)
     label = Column(String(100), nullable=False)
 
     def __repr__(self):
@@ -123,9 +124,9 @@ class Bib(Base):
     sid = Column(Integer, primary_key=True, autoincrement=False)
     mat_cat_id = Column(Integer, ForeignKey('mat_cat.sid'), nullable=False)
     audn_id = Column(
-        Integer, ForeignKey('audience.sid'), nullable=False, default=1)
+        Integer, ForeignKey('audience.sid'), nullable=False)
     lang_id = Column(
-        Integer, ForeignKey('language.sid'), nullable=False, default=4)
+        Integer, ForeignKey('language.sid'), nullable=False)
     author = Column(String(100))
     title = Column(String(150), nullable=False)
     pub_info = Column(String(150))
@@ -149,7 +150,6 @@ class Item(Base):
     __tablename__ = 'item'
     sid = Column(Integer, primary_key=True, autoincrement=False)
     bib_id = Column(Integer, ForeignKey('bib.sid'), nullable=False)
-    branch_id = Column(Integer, ForeignKey('branch.sid'), nullable=False)
     status_id = Column(Integer, ForeignKey('status.sid'), nullable=False)
     item_type_id = Column(Integer, ForeignKey('item_type.sid'), nullable=False)
     barcode = Column(String(14))
@@ -166,11 +166,12 @@ class Item(Base):
 class Hold(Base):
     __tablename__ = 'hold'
     sid = Column(Integer, primary_key=True)
-    hid = Column(Integer, unique=True)
+    hid = Column(Integer)
     item_id = Column(Integer, ForeignKey('item.sid'), nullable=False)
     src_branch_id = Column(Integer, ForeignKey('branch.sid'), nullable=False)
-    dst_branch_id = Column(Integer, ForeignKey('branch.sid'), nullable=False)
+    dst_branch_id = Column(Integer, ForeignKey('branch.sid'))
     timestamp = Column(DateTime, nullable=False, default=datetime.now())
+    issued = Column(Boolean, nullable=False, default=False)
     fulfilled = Column(Boolean, nullable=False, default=False)
 
     def __repr__(self):
@@ -237,6 +238,12 @@ def create_datastore():
             insert(
                 session,
                 MatCat,
+                sid=values[0], code=code, label=values[1])
+
+        for code, values in STATUS_CODES.items():
+            insert(
+                session,
+                Status,
                 sid=values[0], code=code, label=values[1])
 
 
