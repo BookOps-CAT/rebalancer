@@ -57,6 +57,7 @@ ItemData = namedtuple(
     'last_checkout')
 
 
+# encode as JSON for easy updating
 CALL_PATTERNS = OrderedDict(
     ur=re.compile(r'.*URBAN\s', re.IGNORECASE),
     my=re.compile(r'.*MYSTERY\s', re.IGNORECASE),

@@ -1,3 +1,5 @@
+# encode as JSON for easy updating
+
 REBALANCE_CATS = {
     None: (1, 'Unidentified'),
     'fi': (2, 'General Fiction'),

@@ -1,3 +1,5 @@
+# Encode as JSON for easy updating
+
 AUDN_CODES = {
     None: (1, 'Error'),
     'a': (2, 'Adult'),

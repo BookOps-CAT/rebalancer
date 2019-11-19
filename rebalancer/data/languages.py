@@ -1,3 +1,5 @@
+# create and encode as JSON for future for easy updating
+
 LANG_CODES = {
     None: (1, 'Error'),
     'ara': (2, 'Arabic'),

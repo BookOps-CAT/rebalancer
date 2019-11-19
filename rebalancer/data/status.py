@@ -1,3 +1,5 @@
+# create and encode as JSON in the future for easy updating
+
 STATUS_CODES = {
     None: (1, 'error'),
     '-': (2, 'bvailable'),

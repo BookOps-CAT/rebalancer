@@ -1,3 +1,5 @@
+# create & encode in JSON instead for easy updating
+
 BRANCH_CODES = {
     None: (1, "Error"),
     'ag': (2, "Aguilar"),
