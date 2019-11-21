@@ -108,7 +108,7 @@ def customize_shopping_sheet(creds, sheet_id, tabs):
 
     header = [
         'category', 'author', 'title', 'call number',
-        'publication', 'subject', 'new branch', 'item #'
+        'publication', 'subject', 'item #', 'new branch'
     ]
 
     value_input_option = 'RAW'
@@ -136,3 +136,28 @@ def customize_shopping_sheet(creds, sheet_id, tabs):
         service.spreadsheets().batchUpdate(
             spreadsheetId=sheet_id,
             body=request_body).execute()
+
+
+def get_values(creds, sheet_id, values_range):
+    service = discovery.build('sheets', 'v4', credentials=creds)
+    sheet = service.spreadsheets()
+
+    result = sheet.values().get(
+        spreadsheetId=sheet_id, range=values_range).execute()
+
+    values = result.get('values', [])
+
+    return values
+
+
+def get_properties(creds, sheet_id, values_range):
+    service = discovery.build('sheets', 'v4', credentials=creds)
+    includeGridData = True
+    request = service.spreadsheets().get(
+        spreadsheetId=sheet_id, ranges=values_range,
+        includeGridData=includeGridData)
+    response = request.execute()
+    return response
+
+
+
