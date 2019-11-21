@@ -1,4 +1,5 @@
 from data.branches import BRANCH_CODES
+from data.editors import EDITORS
 
 
 def branch_validation(tab_id):
@@ -9,8 +10,8 @@ def branch_validation(tab_id):
         "range": {
             "sheetId": tab_id,
             "startRowIndex": 1,
-            "startColumnIndex": 6,
-            "endColumnIndex": 7,
+            "startColumnIndex": 7,
+            "endColumnIndex": 8,
         },
         "rule": {
             "condition": {
@@ -23,45 +24,6 @@ def branch_validation(tab_id):
         }
     }
 
-
-def conditional_formatting(tab_id):
-    return {
-        "addConditionalFormatRule": {
-            "rule": {
-                "ranges": [
-                    {
-                        "sheetId": tab_id,
-                        "startRowIndex": 1,
-                        "startColumnIndex": 6,
-                        "endColumnIndex": 7
-                    }
-                ],
-                "booleanRule": {
-                    "condition": {
-                        "type": "TEXT_EQ",
-                        "values": [
-                            {
-                                "userEnteredValue": "no"
-                            }
-                        ]
-                    },
-                    "format": {
-                        'backgroundColor':
-                            {
-                                'red': 0.95686275,
-                                'green': 0.78039217,
-                                'blue': 0.7647059,
-                            }
-                    }
-                }
-            },
-            "index": 0
-        }
-    }
-
-
-# needs permission set
-# and needs area protection
 
 def shopping_cart_template(tab_id):
     """
@@ -110,7 +72,51 @@ def shopping_cart_template(tab_id):
                 },
             },
             {
+                "addConditionalFormatRule": {
+                    "rule": {
+                        "ranges": [
+                            {
+                                "sheetId": tab_id,
+                                "startRowIndex": 1,
+                                "startColumnIndex": 7,
+                                "endColumnIndex": 8
+                            }
+                        ],
+                        "booleanRule": {
+                            "condition": {
+                                "type": "NOT_BLANK",
+                                "values": []
+                            },
+                            "format": {
+                                'backgroundColor':
+                                    {
+                                        'red': 0.95686275,
+                                        'green': 0.78039217,
+                                        'blue': 0.7647059,
+                                    }
+                            }
+                        }
+                    },
+                    "index": 0
+                }
+            },
+            {
                 "setDataValidation": branch_validation(tab_id)
+            },
+            {
+                "addProtectedRange": {
+                    "protectedRange": {
+                        "range": {
+                            "sheetId": tab_id,
+                            "endColumnIndex": 0,
+                            "endColumnIndex": 8
+                        },
+                        "description": "admin edits only",
+                        "warningOnly": False,
+                        "requestingUserCanEdit": False,
+                        "editors": EDITORS
+                    }
+                }
             },
             {
                 "updateDimensionProperties": {
@@ -205,9 +211,10 @@ def shopping_cart_template(tab_id):
                         "endIndex": 7
                     },
                     "properties": {
-                        "pixelSize": 80
+                        "pixelSize": 80,
+                        "hiddenByUser": True
                     },
-                    "fields": "pixelSize"
+                    "fields": "pixelSize, hiddenByUser"
                 }
             },
             {
