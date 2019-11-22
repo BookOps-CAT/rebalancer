@@ -1,7 +1,6 @@
 # encode as JSON for easy updating
 
 REBALANCE_CATS = {
-    None: (1, 'Unidentified'),
     'fi': (2, 'General Fiction'),
     'my': (3, 'Mystery Fiction'),
     'sf': (4, 'Sci-fi Fiction'),
@@ -27,4 +26,5 @@ REBALANCE_CATS = {
     'dv': (24, 'DVD'),
     'cd': (25, 'CD'),
     'pe': (26, 'Periodicals'),
+    None: (1, 'Unidentified')
 }
