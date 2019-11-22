@@ -1,7 +1,7 @@
 from googleapiclient import discovery
 
 
-from adapters.gdrive.sheet_templates import shopping_cart_template
+from adapters.gdrive.sheet_templates import shopping_cart_template, cat_headings_formating
 
 
 def create_sheet(creds, sheet_name, tabs=[]):
@@ -133,6 +133,22 @@ def customize_shopping_sheet(creds, sheet_id, tabs):
     for tab_id in tab_ids:
         request_body = shopping_cart_template(tab_id)
 
+        service.spreadsheets().batchUpdate(
+            spreadsheetId=sheet_id,
+            body=request_body).execute()
+
+
+def update_categories_formatting(creds, sheet_id, tabs, row_nos):
+    service = discovery.build('sheets', 'v4', credentials=creds)
+    request = service.spreadsheets().get(
+        spreadsheetId=sheet_id, ranges=tabs, includeGridData=False)
+    response = request.execute()
+    tab_ids = [
+        sheet['properties']['sheetId'] for sheet in response['sheets']]
+
+    # customize the headings of each sheet
+    for tab_id in tab_ids:
+        request_body = cat_headings_formating(tab_id, row_nos)
         service.spreadsheets().batchUpdate(
             spreadsheetId=sheet_id,
             body=request_body).execute()
