@@ -57,7 +57,7 @@ def retrieve_records(session, model, **kwargs):
     return instances
 
 
-def get_eng_cart_items(session, audn, mat_cat, lang):
+def get_items4cart(session, audn, mat_cat, lang):
     if lang == 'eng':
         lang_condition = '='
     else:
@@ -90,7 +90,8 @@ def get_eng_cart_items(session, audn, mat_cat, lang):
             WHERE hold.issued=:issued
                   AND mat_cat.code=:mat_cat
                   AND audience.code=:audn
-                  AND language.code{lang_condition}:lang;
+                  AND language.code{lang_condition}:lang
+            ORDER BY bib.author, bib.title;
     """
 
     stmn = text(stmn)
