@@ -2,6 +2,41 @@ from data.branches import BRANCH_CODES
 from data.editors import EDITORS
 
 
+def format_row(tab_id, row_no):
+    return {
+        "repeatCell": {
+            "range": {
+                "sheetId": tab_id,
+                "startRowIndex": row_no,
+                "endRowIndex": row_no + 1,
+                "startColumnIndex": 0,
+                "endColumnIndex": 6
+            },
+            "cell": {
+                "userEnteredFormat": {
+                    "backgroundColor": {
+                        "red": 0.7176471,
+                        "green": 0.88235295,
+                        "blue": 0.8039216
+                    },
+                    "horizontalAlignment": "LEFT",
+                    "textFormat": {
+                        "fontSize": 10,
+                        "bold": True
+                    }
+                }
+            },
+            "fields": "userEnteredFormat(backgroundColor,textFormat,horizontalAlignment)"
+        }
+    }
+
+
+def cat_headings_formating(tab_id, row_nos):
+    return {
+        "requests": [format_row(tab_id, n) for n in row_nos]
+    }
+
+
 def branch_validation(tab_id):
     values = [
         {"userEnteredValue" : code} for code in BRANCH_CODES.keys() if code is not None]
@@ -109,7 +144,7 @@ def shopping_cart_template(tab_id):
                         "range": {
                             "sheetId": tab_id,
                             "endColumnIndex": 0,
-                            "endColumnIndex": 8
+                            "endColumnIndex": 7
                         },
                         "description": "admin edits only",
                         "warningOnly": False,
