@@ -32,8 +32,9 @@ from datetime import datetime
 import re
 
 
-from datastore import session_scope, Bib, Item, ItemType, Status, Shelf, Hold
-from datastore_transactions import (insert, insert_or_ignore, insert_or_update, retrieve_record)
+from datastore import session_scope, Bib, Item, ItemType, Shelf, Hold
+from datastore_transactions import (insert, insert_or_ignore, insert_or_update,
+                                    retrieve_record)
 from data.audiences import AUDN_CODES
 from data.branches import BRANCH_CODES
 from data.languages import LANG_CODES
@@ -63,7 +64,7 @@ CALL_PATTERNS = OrderedDict(
     my=re.compile(r'.*MYSTERY\s', re.IGNORECASE),
     we=re.compile(r'.*WESTERN\s', re.IGNORECASE),
     cl=re.compile(r'.*CLASSICS', re.IGNORECASE),
-    sf=re.compile(r'.*SCI FI\s', re.IGNORECASE),
+    sf=re.compile(r'.*SCI FI\s|.*SCI-FI\s', re.IGNORECASE),
     rm=re.compile(r'.*ROMANCE\s', re.IGNORECASE),
     gn=re.compile(r'.*GN\sFIC', re.IGNORECASE),
     pi=re.compile(r'.*\sPIC\s', re.IGNORECASE),
@@ -113,6 +114,7 @@ def determine_audience_id(location):
 
 
 def determine_language(call_no):
+    # J-FRE PIC ADAMS add pattern handling
     found = False
     for code in LANG_CODES.keys():
         if code in call_no.lower().split(' '):
