@@ -57,12 +57,19 @@ def retrieve_records(session, model, **kwargs):
     return instances
 
 
-def get_items4cart(session, audn, mat_cat, lang):
-    if lang == 'eng':
-        lang_condition = '='
+def retrieve_last_record(session, model):
+    instance = session.query(model).order_by(model.sid.desc()).first()
+    return instance
+
+
+def get_items4cart(session, audn_id, mat_cat_id, lang_id):
+    # refactor for eng only
+    if lang_id == 5:
+        # 'eng' lang id
+        lang_operator = '='
     else:
-        lang = 'eng'
-        lang_condition = '<>'
+        # world lang ids
+        lang_operator = '<>'
 
     stmn = f"""
         SELECT item.sid as iid,
@@ -77,7 +84,8 @@ def get_items4cart(session, audn, mat_cat, lang):
                bib.title as title,
                bib.pub_info as pub_info,
                bib.call_no as call_no,
-               bib.subject as subject
+               bib.subject as subject,
+               hold.sid as hold_id
         FROM item
         JOIN bib ON item.bib_id = bib.sid
         JOIN hold ON item.sid = hold.item_id
@@ -87,14 +95,16 @@ def get_items4cart(session, audn, mat_cat, lang):
         JOIN mat_cat ON bib.mat_cat_id = mat_cat.sid
         JOIN audience ON bib.audn_id = audience.sid
         JOIN language ON bib.lang_id = language.sid
-            WHERE hold.issued=:issued
-                  AND mat_cat.code=:mat_cat
-                  AND audience.code=:audn
-                  AND language.code{lang_condition}:lang
-            ORDER BY bib.author, bib.title;
+            WHERE hold.outstanding=:outstanding
+                  AND mat_cat.sid=:mat_cat_id
+                  AND audience.sid=:audn_id
+                  AND language.sid{lang_operator}:lang_id
+            ORDER BY bib.call_no, bib.author, bib.title;
     """
 
     stmn = text(stmn)
-    stmn = stmn.bindparams(mat_cat=mat_cat, audn=audn, lang=lang, issued=False)
+    stmn = stmn.bindparams(
+        outstanding=True, mat_cat_id=mat_cat_id,
+        audn_id=audn_id, lang_id=lang_id)
     instances = session.execute(stmn)
     return instances
