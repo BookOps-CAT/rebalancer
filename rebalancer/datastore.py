@@ -26,6 +26,19 @@ Base = declarative_base()
 DB_FH = './temp/store.db'
 
 
+class Cart(Base):
+    __tablename__ = 'cart'
+    sid = Column(Integer, primary_key=True)
+    google_sheet_id = Column(String, nullable=False)
+    created = Column(DateTime, nullable=False, default=datetime.now())
+
+    def __repr(self):
+        state = inspect(self)
+        attrs = ', '.join([
+            f'{attr.key}={attr.loaded_value!r}' for attr in state.attrs])
+        return f'<Cart({attrs})>'
+
+
 class Audience(Base):
     __tablename__ = 'audience'
     sid = Column(Integer, primary_key=True, autoincrement=False)
@@ -167,10 +180,12 @@ class Hold(Base):
     __tablename__ = 'hold'
     sid = Column(Integer, primary_key=True)
     hid = Column(Integer)
+    cart_id = Column(Integer, ForeignKey('cart.sid'))
     item_id = Column(Integer, ForeignKey('item.sid'), nullable=False)
     src_branch_id = Column(Integer, ForeignKey('branch.sid'), nullable=False)
     dst_branch_id = Column(Integer, ForeignKey('branch.sid'))
     timestamp = Column(DateTime, nullable=False, default=datetime.now())
+    outstanding = Column(Boolean, nullable=False, default=True)
     issued = Column(Boolean, nullable=False, default=False)
     fulfilled = Column(Boolean, nullable=False, default=False)
 
