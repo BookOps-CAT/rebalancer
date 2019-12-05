@@ -1,7 +1,7 @@
 # create & encode in JSON instead for easy updating
 
 BRANCH_CODES = {
-    None: (1, "Error"),
+    None: (1, "None"),
     'ag': (2, "Aguilar"),
     'al': (3, "Allerton"),
     'ba': (4, "Baychester"),
