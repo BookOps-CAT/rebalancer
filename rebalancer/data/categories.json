@@ -1,0 +1,512 @@
+[
+    {
+        "rid": 1,
+        "system_id": 1,
+        "code": null,
+        "label": "Other",
+        "adult_order": 99,
+        "teen_order": 99,
+        "kids_order": 99,
+        "wl_order": 99
+    },
+    {
+        "rid": 2,
+        "system_id": 1,
+        "code": "fi",
+        "label": "General Fiction",
+        "adult_order": 1,
+        "teen_order": 1,
+        "kids_order": 1,
+        "wl_order": 1
+    },
+    {
+        "rid": 3,
+        "system_id": 1,
+        "code": "my",
+        "label": "Mystery Fiction",
+        "adult_order": 2,
+        "teen_order": 2,
+        "kids_order": 2,
+        "wl_order": null
+    },
+    {
+        "rid": 4,
+        "system_id": 1,
+        "code": "sf",
+        "label": "Sci-fi Fiction",
+        "adult_order": 3,
+        "teen_order": 3,
+        "kids_order": 3,
+        "wl_order": null
+    },
+    {
+        "rid": 5,
+        "system_id": 1,
+        "code": "rm",
+        "label": "Romance Fiction",
+        "adult_order": 4,
+        "teen_order": null,
+        "kids_order": null,
+        "wl_order": null
+    },
+    {
+        "rid": 6,
+        "system_id": 1,
+        "code": "ur",
+        "label": "Urban Fiction",
+        "adult_order": 5,
+        "teen_order": null,
+        "kids_order": null,
+        "wl_order": null
+    },
+    {
+        "rid": 7,
+        "system_id": 1,
+        "code": "gn",
+        "label": "Graphic Novels",
+        "adult_order": 6,
+        "teen_order": 4,
+        "kids_order": 4,
+        "wl_order": null
+    },
+    {
+        "rid": 8,
+        "system_id": 1,
+        "code": "pi",
+        "label": "Picture Books",
+        "adult_order": null,
+        "teen_order": null,
+        "kids_order": 5,
+        "wl_order": 2
+    },
+    {
+        "rid": 9,
+        "system_id": 1,
+        "code": "er",
+        "label": "Easy Readers",
+        "adult_order": null,
+        "teen_order": null,
+        "kids_order": 6,
+        "wl_order": null
+    },
+    {
+        "rid": 10,
+        "system_id": 1,
+        "code": "yr",
+        "label": "Bridge Books",
+        "adult_order": null,
+        "teen_order": null,
+        "kids_order": 7,
+        "wl_order": null
+    },
+    {
+        "rid": 11,
+        "system_id": 1,
+        "code": "bi",
+        "label": "Biography",
+        "adult_order": 7,
+        "teen_order": 5,
+        "kids_order": 8,
+        "wl_order": 3
+    },
+    {
+        "rid": 12,
+        "system_id": 1,
+        "code": "d0",
+        "label": "Dewey 0xx",
+        "adult_order": 8,
+        "teen_order": 6,
+        "kids_order": 9,
+        "wl_order": 4
+    },
+    {
+        "rid": 13,
+        "system_id": 1,
+        "code": "d1",
+        "label": "Dewey 1xx",
+        "adult_order": 9,
+        "teen_order": 7,
+        "kids_order": 10,
+        "wl_order": 5
+    },
+    {
+        "rid": 14,
+        "system_id": 1,
+        "code": "d2",
+        "label": "Dewey 2xx",
+        "adult_order": 10,
+        "teen_order": 8,
+        "kids_order": 11,
+        "wl_order": 6
+    },
+    {
+        "rid": 15,
+        "system_id": 1,
+        "code": "d3",
+        "label": "Dewey 3xx",
+        "adult_order": 11,
+        "teen_order": 9,
+        "kids_order": 12,
+        "wl_order": 7
+    },
+    {
+        "rid": 16,
+        "system_id": 1,
+        "code": "d4",
+        "label": "Dewey 4xx",
+        "adult_order": 12,
+        "teen_order": 10,
+        "kids_order": 13,
+        "wl_order": 8
+    },
+    {
+        "rid": 17,
+        "system_id": 1,
+        "code": "d5",
+        "label": "Dewey 5xx",
+        "adult_order": 13,
+        "teen_order": 11,
+        "kids_order": 14,
+        "wl_order": 9
+    },
+    {
+        "rid": 18,
+        "system_id": 1,
+        "code": "d6",
+        "label": "Dewey 6xx",
+        "adult_order": 14,
+        "teen_order": 12,
+        "kids_order": 15,
+        "wl_order": 10
+    },
+    {
+        "rid": 19,
+        "system_id": 1,
+        "code": "d7",
+        "label": "Dewey 7xx",
+        "adult_order": 15,
+        "teen_order": 13,
+        "kids_order": 16,
+        "wl_order": 11
+    },
+    {
+        "rid": 20,
+        "system_id": 1,
+        "code": "d8",
+        "label": "Dewey 8xx",
+        "adult_order": 16,
+        "teen_order": 14,
+        "kids_order": 17,
+        "wl_order": 12
+    },
+    {
+        "rid": 21,
+        "system_id": 1,
+        "code": "d9",
+        "label": "Dewey 9xx",
+        "adult_order": 17,
+        "teen_order": 15,
+        "kids_order": 18,
+        "wl_order": 13
+    },
+    {
+        "rid": 22,
+        "system_id": 1,
+        "code": "lp",
+        "label": "Large Print",
+        "adult_order": 18,
+        "teen_order": 16,
+        "kids_order": 19,
+        "wl_order": null
+    },
+    {
+        "rid": 23,
+        "system_id": 1,
+        "code": "dv",
+        "label": "DVD",
+        "adult_order": 19,
+        "teen_order": 17,
+        "kids_order": 20,
+        "wl_order": 14
+    },
+    {
+        "rid": 24,
+        "system_id": 1,
+        "code": "cd",
+        "label": "CD",
+        "adult_order": 20,
+        "teen_order": 18,
+        "kids_order": 21,
+        "wl_order": 15
+    },
+    {
+        "rid": 25,
+        "system_id": 2,
+        "code": null,
+        "label": "Other",
+        "adult_order": 99,
+        "teen_order": 99,
+        "kids_order": 99,
+        "wl_order": 99
+    },
+    {
+        "rid": 26,
+        "system_id": 2,
+        "code": "fi",
+        "label": "General Fiction",
+        "adult_order": 1,
+        "teen_order": 1,
+        "kids_order": 1,
+        "wl_order": 1
+    },
+    {
+        "rid": 27,
+        "system_id": 2,
+        "code": "my",
+        "label": "Mystery Fiction",
+        "adult_order": 2,
+        "teen_order": 2,
+        "kids_order": 2,
+        "wl_order": null
+    },
+    {
+        "rid": 28,
+        "system_id": 2,
+        "code": "sf",
+        "label": "Sci-fi Fiction",
+        "adult_order": 3,
+        "teen_order": 3,
+        "kids_order": 3,
+        "wl_order": null
+    },
+    {
+        "rid": 29,
+        "system_id": 2,
+        "code": "rm",
+        "label": "Romance Fiction",
+        "adult_order": 4,
+        "teen_order": null,
+        "kids_order": null,
+        "wl_order": null
+    },
+    {
+        "rid": 30,
+        "system_id": 2,
+        "code": "ur",
+        "label": "Urban Fiction",
+        "adult_order": 5,
+        "teen_order": null,
+        "kids_order": null,
+        "wl_order": null
+    },
+    {
+        "rid": 31,
+        "system_id": 2,
+        "code": "we",
+        "label": "Westerns",
+        "adult_order": 6,
+        "teen_order": null,
+        "kids_order": null,
+        "wl_order": null
+    },
+    {
+        "rid": 32,
+        "system_id": 2,
+        "code": "cl",
+        "label": "Classics",
+        "adult_order": 7,
+        "teen_order": 4,
+        "kids_order": null,
+        "wl_order": null
+    },
+    {
+        "rid": 33,
+        "system_id": 2,
+        "code": "ho",
+        "label": "Holiday",
+        "adult_order": null,
+        "teen_order": null,
+        "kids_order": 4,
+        "wl_order": null
+    },
+    {
+        "rid": 34,
+        "system_id": 2,
+        "code": "gn",
+        "label": "Graphic Novels",
+        "adult_order": 8,
+        "teen_order": 5,
+        "kids_order": 5,
+        "wl_order": 2
+    },
+    {
+        "rid": 35,
+        "system_id": 2,
+        "code": "pi",
+        "label": "Picture Books",
+        "adult_order": null,
+        "teen_order": null,
+        "kids_order": 6,
+        "wl_order": 3
+    },
+    {
+        "rid": 36,
+        "system_id": 2,
+        "code": "er",
+        "label": "Easy Readers",
+        "adult_order": null,
+        "teen_order": null,
+        "kids_order": 7,
+        "wl_order": null
+    },
+    {
+        "rid": 37,
+        "system_id": 2,
+        "code": "yr",
+        "label": "Young Readers",
+        "adult_order": null,
+        "teen_order": null,
+        "kids_order": 8,
+        "wl_order": null
+    },
+    {
+        "rid": 38,
+        "system_id": 2,
+        "code": "bi",
+        "label": "Biography",
+        "adult_order": 9,
+        "teen_order": 6,
+        "kids_order": 9,
+        "wl_order": 4
+    },
+    {
+        "rid": 39,
+        "system_id": 2,
+        "code": "d0",
+        "label": "Dewey 0xx",
+        "adult_order": 10,
+        "teen_order": 7,
+        "kids_order": 10,
+        "wl_order": 5
+    },
+    {
+        "rid": 40,
+        "system_id": 2,
+        "code": "d1",
+        "label": "Dewey 1xx",
+        "adult_order": 11,
+        "teen_order": 8,
+        "kids_order": 11,
+        "wl_order": 6
+    },
+    {
+        "rid": 41,
+        "system_id": 2,
+        "code": "d2",
+        "label": "Dewey 2xx",
+        "adult_order": 12,
+        "teen_order": 9,
+        "kids_order": 12,
+        "wl_order": 7
+    },
+    {
+        "rid": 42,
+        "system_id": 2,
+        "code": "d3",
+        "label": "Dewey 3xx",
+        "adult_order": 13,
+        "teen_order": 10,
+        "kids_order": 13,
+        "wl_order": 8
+    },
+    {
+        "rid": 43,
+        "system_id": 2,
+        "code": "d4",
+        "label": "Dewey 4xx",
+        "adult_order": 14,
+        "teen_order": 11,
+        "kids_order": 14,
+        "wl_order": 9
+    },
+    {
+        "rid": 44,
+        "system_id": 2,
+        "code": "d5",
+        "label": "Dewey 5xx",
+        "adult_order": 15,
+        "teen_order": 12,
+        "kids_order": 15,
+        "wl_order": 10
+    },
+    {
+        "rid": 45,
+        "system_id": 2,
+        "code": "d6",
+        "label": "Dewey 6xx",
+        "adult_order": 16,
+        "teen_order": 13,
+        "kids_order": 16,
+        "wl_order": 11
+    },
+    {
+        "rid": 46,
+        "system_id": 2,
+        "code": "d7",
+        "label": "Dewey 7xx",
+        "adult_order": 17,
+        "teen_order": 14,
+        "kids_order": 17,
+        "wl_order": 12
+    },
+    {
+        "rid": 47,
+        "system_id": 2,
+        "code": "d8",
+        "label": "Dewey 8xx",
+        "adult_order": 18,
+        "teen_order": 15,
+        "kids_order": 18,
+        "wl_order": 13
+    },
+    {
+        "rid": 48,
+        "system_id": 2,
+        "code": "d9",
+        "label": "Dewey 9xx",
+        "adult_order": 19,
+        "teen_order": 16,
+        "kids_order": 19,
+        "wl_order": 14
+    },
+    {
+        "rid": 49,
+        "system_id": 2,
+        "code": "lp",
+        "label": "Large Print",
+        "adult_order": 20,
+        "teen_order": 17,
+        "kids_order": 20,
+        "wl_order": null
+    },
+    {
+        "rid": 50,
+        "system_id": 2,
+        "code": "dv",
+        "label": "DVD",
+        "adult_order": 21,
+        "teen_order": 18,
+        "kids_order": 21,
+        "wl_order": 15
+    },
+    {
+        "rid": 51,
+        "system_id": 2,
+        "code": "cd",
+        "label": "CD",
+        "adult_order": 22,
+        "teen_order": 19,
+        "kids_order": 22,
+        "wl_order": 16
+    }
+]

@@ -1,0 +1,1192 @@
+[
+    {
+        "label": "NONE",
+        "code": null,
+        "rid": 1,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Central Juv Children's Room",
+        "code": "02",
+        "rid": 2,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Central YA Young Teens",
+        "code": "03",
+        "rid": 3,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Central BKLYN Collection",
+        "code": "04",
+        "rid": 4,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Central AMMS Art & Music",
+        "code": "11",
+        "rid": 5,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Central Pop Audiovisual (Multimedia)",
+        "code": "12",
+        "rid": 6,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Central HBR (Hist/Biog/Rel)",
+        "code": "13",
+        "rid": 7,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Central Literature & Languages",
+        "code": "14",
+        "rid": 8,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Central SST",
+        "code": "16",
+        "rid": 9,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Arlington",
+        "code": "21",
+        "rid": 10,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Bedford",
+        "code": "22",
+        "rid": 11,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Business Library",
+        "code": "23",
+        "rid": 12,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Brighton Beach",
+        "code": "24",
+        "rid": 13,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Borough Park",
+        "code": "25",
+        "rid": 14,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Stone Avenue",
+        "code": "26",
+        "rid": 15,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Brownsville",
+        "code": "27",
+        "rid": 16,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Bay Ridge",
+        "code": "28",
+        "rid": 17,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Bushwick",
+        "code": "29",
+        "rid": 18,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Crown Heights",
+        "code": "30",
+        "rid": 19,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Carroll Gardens",
+        "code": "31",
+        "rid": 20,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Coney Island",
+        "code": "32",
+        "rid": 21,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Clarendon",
+        "code": "33",
+        "rid": 22,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Canarsie",
+        "code": "34",
+        "rid": 23,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "DeKalb",
+        "code": "35",
+        "rid": 24,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "East Flatbush",
+        "code": "36",
+        "rid": 25,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Eastern Parkway",
+        "code": "37",
+        "rid": 26,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Flatbush",
+        "code": "38",
+        "rid": 27,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Flatlands",
+        "code": "39",
+        "rid": 28,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Fort Hamilton",
+        "code": "40",
+        "rid": 29,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Greenpoint",
+        "code": "41",
+        "rid": 30,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Highlawn",
+        "code": "42",
+        "rid": 31,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Kensington",
+        "code": "43",
+        "rid": 32,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Kings Bay",
+        "code": "44",
+        "rid": 33,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Kings Highway",
+        "code": "45",
+        "rid": 34,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Leonard",
+        "code": "46",
+        "rid": 35,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Macon",
+        "code": "47",
+        "rid": 36,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Midwood",
+        "code": "48",
+        "rid": 37,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Mapleton",
+        "code": "49",
+        "rid": 38,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Brooklyn Heights",
+        "code": "50",
+        "rid": 39,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "New Utrecht",
+        "code": "51",
+        "rid": 40,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "New Lots",
+        "code": "52",
+        "rid": 41,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Park Slope",
+        "code": "53",
+        "rid": 42,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Rugby",
+        "code": "54",
+        "rid": 43,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Sunset Park",
+        "code": "55",
+        "rid": 44,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Sheepshead Bay",
+        "code": "56",
+        "rid": 45,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Saratoga",
+        "code": "57",
+        "rid": 46,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Marcy",
+        "code": "59",
+        "rid": 47,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Williamsburgh",
+        "code": "60",
+        "rid": 48,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Washington Irving",
+        "code": "61",
+        "rid": 49,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Walt Whitman",
+        "code": "62",
+        "rid": 50,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Kidsmobile",
+        "code": "63",
+        "rid": 51,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "BiblioBus",
+        "code": "64",
+        "rid": 52,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Cypress Hills",
+        "code": "65",
+        "rid": 53,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Gerritsen Beach",
+        "code": "66",
+        "rid": 54,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "McKinley Park",
+        "code": "67",
+        "rid": 55,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Mill Basin",
+        "code": "68",
+        "rid": 56,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Pacific",
+        "code": "69",
+        "rid": 57,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Red Hook",
+        "code": "70",
+        "rid": 58,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Ulmer Park",
+        "code": "71",
+        "rid": 59,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Bookmobile",
+        "code": "72",
+        "rid": 60,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Gravesend",
+        "code": "74",
+        "rid": 61,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Homecrest",
+        "code": "76",
+        "rid": 62,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Windsor Terrace",
+        "code": "77",
+        "rid": 63,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Paerdegat",
+        "code": "78",
+        "rid": 64,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Brower Park",
+        "code": "79",
+        "rid": 65,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Ryder",
+        "code": "80",
+        "rid": 66,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Jamaica Bay",
+        "code": "81",
+        "rid": 67,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Dyker",
+        "code": "82",
+        "rid": 68,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Clinton Hill",
+        "code": "83",
+        "rid": 69,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Spring Creek",
+        "code": "85",
+        "rid": 70,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Cortelyou",
+        "code": "87",
+        "rid": 71,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "BookOps",
+        "code": "89",
+        "rid": 72,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Service to the Aging SAGE/SOA",
+        "code": "90",
+        "rid": 73,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "Central Literacy",
+        "code": "94",
+        "rid": 74,
+        "active": true,
+        "system_id": 1
+    },
+    {
+        "label": "NONE",
+        "code": null,
+        "rid": 75,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Aguilar",
+        "code": "ag",
+        "rid": 76,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Allerton",
+        "code": "al",
+        "rid": 77,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Baychester",
+        "code": "ba",
+        "rid": 78,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Bronx Library Center",
+        "code": "bc",
+        "rid": 79,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Belmont",
+        "code": "be",
+        "rid": 80,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Bloomingdale",
+        "code": "bl",
+        "rid": 81,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "George Bruce",
+        "code": "br",
+        "rid": 82,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Battery Park",
+        "code": "bt",
+        "rid": 83,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Cathedral, T. C. Cooke",
+        "code": "ca",
+        "rid": 84,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "SASB Children's Center",
+        "code": "cc",
+        "rid": 85,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Chatham Square",
+        "code": "ch",
+        "rid": 86,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "City Island",
+        "code": "ci",
+        "rid": 87,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Morningside Heights",
+        "code": "cl",
+        "rid": 88,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Clason's Point",
+        "code": "cp",
+        "rid": 89,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Columbus",
+        "code": "cs",
+        "rid": 90,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Castle Hill",
+        "code": "ct",
+        "rid": 91,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Dongan Hills",
+        "code": "dh",
+        "rid": 92,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Spuyten Duyvil",
+        "code": "dy",
+        "rid": 93,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Eastchester",
+        "code": "ea",
+        "rid": 94,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Epiphany",
+        "code": "ep",
+        "rid": 95,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Edenwald",
+        "code": "ew",
+        "rid": 96,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "58th Street",
+        "code": "fe",
+        "rid": 97,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Fort Washington",
+        "code": "fw",
+        "rid": 98,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Francis Martin",
+        "code": "fx",
+        "rid": 99,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Grand Central",
+        "code": "gc",
+        "rid": 100,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Grand Concourse",
+        "code": "gd",
+        "rid": 101,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Great Kills",
+        "code": "gk",
+        "rid": 102,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "High Bridge",
+        "code": "hb",
+        "rid": 103,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "125th Street",
+        "code": "hd",
+        "rid": 104,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Hamilton Fish Park",
+        "code": "hf",
+        "rid": 105,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Hamilton Grange",
+        "code": "hg",
+        "rid": 106,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Huguenot Park",
+        "code": "hk",
+        "rid": 107,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Harlem",
+        "code": "hl",
+        "rid": 108,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Hudson Park",
+        "code": "hp",
+        "rid": 109,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Hunt's Point",
+        "code": "hs",
+        "rid": 110,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Countee Cullen",
+        "code": "ht",
+        "rid": 111,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "115th Street (temp)",
+        "code": "hu",
+        "rid": 112,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Inwood",
+        "code": "in",
+        "rid": 113,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Jefferson Market",
+        "code": "jm",
+        "rid": 114,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Jerome Park",
+        "code": "jp",
+        "rid": 115,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Kingsbridge",
+        "code": "kb",
+        "rid": 116,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Kips Bay",
+        "code": "kp",
+        "rid": 117,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Andrew Heiskell",
+        "code": "lb",
+        "rid": 118,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "New Amsterdam",
+        "code": "lm",
+        "rid": 119,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "S.A. Schwarzman Bldg.",
+        "code": "ma",
+        "rid": 120,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Macomb's Bridge",
+        "code": "mb",
+        "rid": 121,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Melrose",
+        "code": "me",
+        "rid": 122,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Mott Haven",
+        "code": "mh",
+        "rid": 123,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Mulberry Street",
+        "code": "ml",
+        "rid": 124,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Mid-Manhattan",
+        "code": "mm",
+        "rid": 125,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Mariner's Harbor",
+        "code": "mn",
+        "rid": 126,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Mosholu",
+        "code": "mo",
+        "rid": 127,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Morris Park",
+        "code": "mp",
+        "rid": 128,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Morrisania",
+        "code": "mr",
+        "rid": 129,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Muhlenberg",
+        "code": "mu",
+        "rid": 130,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Performing Arts",
+        "code": "my",
+        "rid": 131,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "West New Brighton",
+        "code": "nb",
+        "rid": 132,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "New Dorp",
+        "code": "nd",
+        "rid": 133,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "96th Street",
+        "code": "ns",
+        "rid": 134,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Ottendorfer",
+        "code": "ot",
+        "rid": 135,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Parkchester",
+        "code": "pk",
+        "rid": 136,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Pelham Bay",
+        "code": "pm",
+        "rid": 137,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Port Richmond",
+        "code": "pr",
+        "rid": 138,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Riverdale",
+        "code": "rd",
+        "rid": 139,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Roosevelt Island",
+        "code": "ri",
+        "rid": 140,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Riverside",
+        "code": "rs",
+        "rid": 141,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Richmondtown",
+        "code": "rt",
+        "rid": 142,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "St. Agnes",
+        "code": "sa",
+        "rid": 143,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "South Beach",
+        "code": "sb",
+        "rid": 144,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Schomburg",
+        "code": "sc",
+        "rid": 145,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Sedgwick",
+        "code": "sd",
+        "rid": 146,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Seward Park",
+        "code": "se",
+        "rid": 147,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "St. George Library Center",
+        "code": "sg",
+        "rid": 148,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Science, Industry & Business",
+        "code": "sl",
+        "rid": 149,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "S. Niarchos Found. Library",
+        "code": "sn",
+        "rid": 150,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "67th Street",
+        "code": "ss",
+        "rid": 151,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Stapleton",
+        "code": "st",
+        "rid": 152,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Soundview",
+        "code": "sv",
+        "rid": 153,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Throg's Neck",
+        "code": "tg",
+        "rid": 154,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Todt Hill-Westerleigh",
+        "code": "th",
+        "rid": 155,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Tremont",
+        "code": "tm",
+        "rid": 156,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Tompkins Square",
+        "code": "ts",
+        "rid": 157,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Tottenville",
+        "code": "tv",
+        "rid": 158,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Van Cortlandt",
+        "code": "vc",
+        "rid": 159,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Van Nest",
+        "code": "vn",
+        "rid": 160,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Webster",
+        "code": "wb",
+        "rid": 161,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "West Farms",
+        "code": "wf",
+        "rid": 162,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Washington Heights",
+        "code": "wh",
+        "rid": 163,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Wakefield",
+        "code": "wk",
+        "rid": 164,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Woodlawn Heights",
+        "code": "wl",
+        "rid": 165,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Woodstock",
+        "code": "wo",
+        "rid": 166,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Westchester Square",
+        "code": "wt",
+        "rid": 167,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Yorkville",
+        "code": "yv",
+        "rid": 168,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "53rd Street",
+        "code": "ft",
+        "rid": 169,
+        "active": true,
+        "system_id": 2
+    },
+    {
+        "label": "Library Services Center",
+        "code": "ls",
+        "rid": 170,
+        "active": true,
+        "system_id": 2
+    }
+]

@@ -2,23 +2,25 @@
 Sierra export parser
 
 Export fields in following order:
-    Type: Field
-    Item: Record Number
     Bibliographic: Record Number
-    Bibliographic: Author
+    Bibliographic: Created Date
     Bibliographic: Title
-    Bibliographic: Publication Info.
+    Bibliographic: Author
     Bibliographic: Call No.
-    Bibliographic: Subject
-    Item: Item Type
-    Item: Total Checkouts
-    Item: Last Checkout Date
+    Bibliographic: Publication Info.
+    Item: Record Number
+    Item: Created Date
     Item: Location
-    Item: Status
+    Item: Item Type
+    Item: OPAC Message
+    Item: Last Checkout Date
+    Item: Total Checkouts
+    Item: Total Renewals
+
 
 Export formatting:
-    Field delimiter: ^
-    Text qualifier: None
+    Field delimiter: |
+    Text qualifier: "
     Repeated field delimiter: ~
     Maximum field length: None
 
@@ -32,38 +34,25 @@ from datetime import datetime
 import re
 
 
-from datastore import session_scope, Bib, Item, ItemType, Shelf, Hold
-from datastore_transactions import (insert, insert_or_ignore, insert_or_update,
-                                    retrieve_record)
-from data.audiences import AUDN_CODES
-from data.branches import BRANCH_CODES
-from data.languages import LANG_CODES
-from data.categories import REBALANCE_CATS
-from data.status import STATUS_CODES
-
+from datastore import session_scope, Branch, OverflowItem, ItemType, ShelfCode
+from datastore_transactions import create_code_idx, insert
 
 RowData = namedtuple(
     'RowData',
-    'iid, bid, author, title, pub_info, call_no, subject, item_type, '
-    'checkouts, last_checkout, location, status')
-
-BibData = namedtuple(
-    'BibData',
-    'sid, author, title, pub_info, call_no, subject, mat_cat_id, '
-    'audn_id, lang_id')
-
-ItemData = namedtuple(
-    'ItemData',
-    'sid, bib_id, status_id, item_type_id, checkouts, '
-    'last_checkout')
+    'bib_id, bib_created_date, title, author, pub_info, call_no, '
+    'item_id, item_created_date, location, item_type, '
+    'opac_msg, last_out_date, total_checkouts, total_renewals')
 
 
-# encode as JSON for easy updating
-CALL_PATTERNS = OrderedDict(
+DATE_PATTERN = re.compile(r'\d{4}')
+
+NYP_CALL_PATTERNS = OrderedDict(
+    lp=re.compile(r'.*LG[\s,-]PRINT\s', re.IGNORECASE),
     ur=re.compile(r'.*URBAN\s', re.IGNORECASE),
     my=re.compile(r'.*MYSTERY\s', re.IGNORECASE),
     we=re.compile(r'.*WESTERN\s', re.IGNORECASE),
-    cl=re.compile(r'.*CLASSICS', re.IGNORECASE),
+    cl=re.compile(r'.*CLASSICS\s', re.IGNORECASE),
+    ho=re.compile(r'.*J\sHOLIDAY\s', re.IGNORECASE),
     sf=re.compile(r'.*SCI FI\s|.*SCI-FI\s', re.IGNORECASE),
     rm=re.compile(r'.*ROMANCE\s', re.IGNORECASE),
     gn=re.compile(r'.*GN\sFIC', re.IGNORECASE),
@@ -74,7 +63,6 @@ CALL_PATTERNS = OrderedDict(
     bi=re.compile(r'^B\s.*|\sB\s.*', re.IGNORECASE),
     dv=re.compile(r'^DVD\s.*|.*\sDVD\s.*', re.IGNORECASE),
     cd=re.compile(r'^CD\s.*', re.IGNORECASE),
-    pe=re.compile(r'^PER|.*\sPER', re.IGNORECASE),
     d0=re.compile(r'^0\d{2}.*|.*\s0\d{2}.*', re.IGNORECASE),
     d1=re.compile(r'^1\d{2}.*|.*\s1\d{2}.*', re.IGNORECASE),
     d2=re.compile(r'^2\d{2}.*|.*\s2\d{2}.*', re.IGNORECASE),
@@ -89,106 +77,62 @@ CALL_PATTERNS = OrderedDict(
 
 
 def prep_ids(sierra_id):
-    return int(sierra_id[1:-1])
+    try:
+        return int(sierra_id[1:-1])
+    except TypeError:
+        return
+    except ValueError:
+        return
 
 
-def find_nth_value(field, n):
-    return field.split('~')[n]
+def determine_branch_id(location, branch_idx):
+    code = location[:2].lower()
+    if code in branch_idx:
+        return branch_idx[code]
+    else:
+        return branch_idx[None]
 
 
-def determine_mat_category(call_no):
-    call_no = find_nth_value(call_no, 0)
-    for p, v in CALL_PATTERNS.items():
+def parse_pub_date(pub_info):
+    try:
+        match = DATE_PATTERN.search(pub_info)
+        if match:
+            return match.group(0)
+    except TypeError:
+        return
+
+
+def string2date(date_string):
+    try:
+        return datetime.strptime(date_string[:10], '%m-%d-%Y').date()
+    except TypeError:
+        return
+    except ValueError:
+        return
+
+
+def determine_nyp_mat_cat(call_no):
+    # call_no =
+    for p, v in NYP_CALL_PATTERNS.items():
         m = v.search(call_no)
         if m:
             return p
 
 
-def determine_audience_id(location):
-    try:
-        audn_id = AUDN_CODES[location[2]][0]
-    except KeyError:
-        # eng code id is 4
-        audn_id = 4
-    return audn_id
-
-
-def determine_language(call_no):
-    # J-FRE PIC ADAMS add pattern handling
-    found = False
-    for code in LANG_CODES.keys():
-        if code in call_no.lower().split(' '):
-            found = True
-            break
-    if found:
-        return code
-    else:
-        return 'eng'
-
-
-def determine_branch_id(location):
-    code = location[:2].lower()
-    if code in BRANCH_CODES.keys():
-        return BRANCH_CODES[code][0]
-    else:
-        return BRANCH_CODES[None][0]
-
-
-def normalize_date(date_string):
-    if date_string[0] == ' ':
-        return None
-    else:
-        return datetime.strptime(date_string[:10], '%m-%d-%Y')
-
-
-def determine_status_id(code):
-    if code in STATUS_CODES.keys():
-        return STATUS_CODES[code][0]
-    else:
-        return STATUS_CODES[None][0]
-
-
-def determine_item_type_id(session, code):
-    res = retrieve_record(
-        session,
-        ItemType,
-        code=code.strip())
-
-    if res:
-        item_type_id = res.sid
-    else:
-        res = insert_or_ignore(
-            session,
-            ItemType,
-            code=code.strip())
-        session.flush()
-        item_type_id = res.sid
-
-    return item_type_id
-
-
-def determine_shelf_id(session, location):
-    code = location[2:].strip()
-    res = retrieve_record(
-        session,
-        Shelf,
-        code=code)
-    if res:
-        return res.sid
-    else:
-        res = insert_or_ignore(
-            session,
-            Shelf,
-            code=code)
-        session.flush()
-        return res.sid
+def get_mat_cat_id(call_no, opac_msg, system_id):
+    if system_id == 1:
+        # BPL
+        pass
+    elif system_id == 2:
+        # NYPL
+        mat_cat = determine_nyp_mat_cat(call_no)
 
 
 def sierra_export_reader(fh):
     reader = csv.reader(
         open(fh, 'r', encoding='utf-8', newline=''),
-        delimiter='^',
-        quoting=csv.QUOTE_NONE)
+        delimiter='|',
+        quotechar='"')
 
     # skip header
     next(reader)
@@ -197,45 +141,84 @@ def sierra_export_reader(fh):
         yield row
 
 
-def save2store(fh):
+def save2store(fh, system_id):
     data = sierra_export_reader(fh)
     with session_scope() as session:
+        branch_idx = create_code_idx(session, Branch, system_id=system_id)
+        for k, v in branch_idx.items():
+            print(k, v)
+
         for element in data:
-            bib = BibData(
-                sid=prep_ids(element.bid),
-                author=element.author,
-                title=find_nth_value(element.title, -1),
-                pub_info=find_nth_value(element.pub_info, 0),
-                subject=find_nth_value(element.subject, 0),
-                call_no=find_nth_value(element.call_no, 0),
-                mat_cat_id=REBALANCE_CATS[
-                    determine_mat_category(element.call_no)][0],
-                audn_id=determine_audience_id(element.location),
-                lang_id=LANG_CODES[determine_language(element.call_no)][0]
-            )
 
-            item = ItemData(
-                sid=prep_ids(element.iid),
-                bib_id=prep_ids(element.bid),
-                # shelf_id=determine_shelf_id(element.location),
-                status_id=determine_status_id(element.status),
-                item_type_id=determine_item_type_id(
-                    session, element.item_type),
-                checkouts=int(element.checkouts),
-                last_checkout=normalize_date(element.last_checkout))
+            overflow_item = dict(
+                system_id=system_id,
+                bib_id=prep_ids(element.bib_id),
+                item_id=prep_ids(element.item_id),
+                src_branch_id=determine_branch_id(element.location, branch_idx),
+                pub_date=parse_pub_date(element.pub_info),
+                bib_created_date=string2date(element.bib_created_date),
+                item_created_date=string2date(element.item_created_data),
+                mat_cat_id=None
+                )
 
-            insert_or_update(
-                session,
-                Bib,
-                **bib._asdict())
 
-            insert_or_update(
-                session,
-                Item,
-                **item._asdict())
+            # session.commit()
 
-            insert(
-                session,
-                Hold,
-                item_id=item.sid,
-                src_branch_id=determine_branch_id(element.location))
+
+
+
+# def find_nth_value(field, n):
+#     return field.split('~')[n]
+
+
+# def determine_mat_category(call_no):
+#     call_no = find_nth_value(call_no, 0)
+#     for p, v in CALL_PATTERNS.items():
+#         m = v.search(call_no)
+#         if m:
+#             return p
+
+
+# def determine_audience_id(location):
+#     try:
+#         audn_id = AUDN_CODES[location[2]][0]
+#     except KeyError:
+#         # eng code id is 4
+#         audn_id = 4
+#     return audn_id
+
+
+# def determine_language(call_no):
+#     # J-FRE PIC ADAMS add pattern handling
+#     found = False
+#     for code in LANG_CODES.keys():
+#         if code in call_no.lower().split(' '):
+#             found = True
+#             break
+#     if found:
+#         return code
+#     else:
+#         return 'eng'
+
+
+
+# def determine_item_type_id(session, code):
+#     res = retrieve_record(
+#         session,
+#         ItemType,
+#         code=code.strip())
+
+#     if res:
+#         item_type_id = res.sid
+#     else:
+#         res = insert_or_ignore(
+#             session,
+#             ItemType,
+#             code=code.strip())
+#         session.flush()
+#         item_type_id = res.sid
+
+#     return item_type_id
+
+
+

@@ -3,21 +3,17 @@ Defines and initiates database
 """
 from contextlib import contextmanager
 from datetime import datetime
+import json
 import sqlite3
 
-from sqlalchemy import (Boolean, Column, DateTime, Float, ForeignKey,
-                        Integer, String)
+from sqlalchemy import (Boolean, Column, Date, DateTime, ForeignKey,
+                        Integer, String, UniqueConstraint)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.inspection import inspect
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
 
 
-from data.branches import BRANCH_CODES
-from data.audiences import AUDN_CODES
-from data.languages import LANG_CODES
-from data.categories import REBALANCE_CATS
-from data.status import STATUS_CODES
 from datastore_transactions import insert
 
 
@@ -26,13 +22,30 @@ Base = declarative_base()
 DB_FH = './temp/store.db'
 
 
+class System(Base):
+    __tablename__ = 'system'
+    rid = Column(Integer, primary_key=True)
+    code = Column(String(3), unique=True)
+    label = Column(String(25))
+
+    def __repr__(self):
+        return f"<System(rid='{self.rid}', code='{self.code}', " \
+               f"label='{self.name}')>"
+
+
 class Cart(Base):
     __tablename__ = 'cart'
-    sid = Column(Integer, primary_key=True)
-    google_sheet_id = Column(String, nullable=False)
+    rid = Column(Integer, primary_key=True)
+    system_id = Column(Integer, ForeignKey('system.rid'), nullable=False)
+    shopping_cart_id = Column(String, nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.now())
 
-    def __repr(self):
+    items = relationship(
+        'OverflowItem',
+        cascade='all, delete-orphan',
+        lazy='joined')
+
+    def __repr__(self):
         state = inspect(self)
         attrs = ', '.join([
             f'{attr.key}={attr.loaded_value!r}' for attr in state.attrs])
@@ -41,7 +54,7 @@ class Cart(Base):
 
 class Audience(Base):
     __tablename__ = 'audience'
-    sid = Column(Integer, primary_key=True, autoincrement=False)
+    rid = Column(Integer, primary_key=True)
     code = Column(String(1), unique=True)
     label = Column(String(50))
 
@@ -54,8 +67,12 @@ class Audience(Base):
 
 class Branch(Base):
     __tablename__ = 'branch'
-    sid = Column(Integer, primary_key=True)
-    code = Column(String(2), unique=True)
+    __table_args__ = (
+        UniqueConstraint('system_id', 'code', name='uix_branch'), )
+    rid = Column(Integer, primary_key=True)
+    system_id = Column(Integer, ForeignKey('system.rid'), nullable=False)
+    active = Column(Boolean, default=True)
+    code = Column(String(2))
     label = Column(String(100))
 
     def __repr__(self):
@@ -65,9 +82,24 @@ class Branch(Base):
         return f'<Branch({attrs})>'
 
 
+class ShelfCode(Base):
+    __tablename__ = 'shelf_code'
+    __table_args__ = (
+        UniqueConstraint('code', 'system_id', name='uix_shelfcodes'), )
+    rid = Column(Integer, primary_key=True)
+    system_id = Column(Integer, ForeignKey('system.rid'), nullable=False)
+    code = Column(String(3))
+
+    def __repr__(self):
+        state = inspect(self)
+        attrs = ', '.join([
+            f'{attr.key}={attr.loaded_value!r}' for attr in state.attrs])
+        return f'<ShelfCode({attrs})>'
+
+
 class Language(Base):
     __tablename__ = 'language'
-    sid = Column(Integer, primary_key=True)
+    rid = Column(Integer, primary_key=True)
     code = Column(String(3), unique=True)
     label = Column(String(50))
 
@@ -78,39 +110,13 @@ class Language(Base):
         return f'<Language({attrs})>'
 
 
-class Shelf(Base):
-    __tablename__ = 'shelf'
-    sid = Column(Integer, primary_key=True)
-    code = Column(String(5), unique=True)
-    label = Column(String(50))
-    linear_feet = Column(Float)
-    est_items = Column(Integer)
-
-    def __repr__(self):
-        state = inspect(self)
-        attrs = ', '.join([
-            f'{attr.key}={attr.loaded_value!r}' for attr in state.attrs])
-        return f'<Shelf({attrs})>'
-
-
-class Status(Base):
-    __tablename__ = 'status'
-    sid = Column(Integer, primary_key=True)
-    code = Column(String(1), unique=True)
-    label = Column(String(50))
-
-    def __repr__(self):
-        state = inspect(self)
-        attrs = ', '.join([
-            f'{attr.key}={attr.loaded_value!r}' for attr in state.attrs])
-        return f'<Status({attrs})>'
-
-
 class ItemType(Base):
     __tablename__ = 'item_type'
-    sid = Column(Integer, primary_key=True)
+    __table_args__ = (
+        UniqueConstraint('code', 'system_id', name='uix_itemtype'), )
+    rid = Column(Integer, primary_key=True)
+    system_id = Column(Integer, ForeignKey('system.rid'), nullable=False)
     code = Column(String(3), unique=True)
-    label = Column(String(75))
 
     def __repr__(self):
         state = inspect(self)
@@ -121,9 +127,16 @@ class ItemType(Base):
 
 class MatCat(Base):
     __tablename__ = 'mat_cat'
-    sid = Column(Integer, primary_key=True)
-    code = Column(String(2), unique=True)
+    __table_args__ = (
+        UniqueConstraint('code', 'system_id', name='uix_matcat'), )
+    rid = Column(Integer, primary_key=True)
+    system_id = Column(Integer, ForeignKey('system.rid'), nullable=False)
+    code = Column(String(2))
     label = Column(String(100), nullable=False)
+    adult_order = Column(Integer)
+    teen_order = Column(Integer)
+    kids_order = Column(Integer)
+    wl_order = Column(Integer)
 
     def __repr__(self):
         state = inspect(self)
@@ -132,68 +145,34 @@ class MatCat(Base):
         return f'<MatCat({attrs})>'
 
 
-class Bib(Base):
-    __tablename__ = 'bib'
-    sid = Column(Integer, primary_key=True, autoincrement=False)
-    mat_cat_id = Column(Integer, ForeignKey('mat_cat.sid'), nullable=False)
-    audn_id = Column(
-        Integer, ForeignKey('audience.sid'), nullable=False)
-    lang_id = Column(
-        Integer, ForeignKey('language.sid'), nullable=False)
-    author = Column(String(100))
-    title = Column(String(150), nullable=False)
-    pub_info = Column(String(150))
-    call_no = Column(String(150))
-    subject = Column(String(500))
-    rating = Column(Float)
-
-    items = relationship(
-        'Item',
-        lazy='joined',
-        cascade='all, delete-orphan')
-
-    def __repr__(self):
-        state = inspect(self)
-        attrs = ', '.join([
-            f'{attr.key}={attr.loaded_value!r}' for attr in state.attrs])
-        return f'<Bib({attrs})>'
-
-
-class Item(Base):
-    __tablename__ = 'item'
-    sid = Column(Integer, primary_key=True, autoincrement=False)
-    bib_id = Column(Integer, ForeignKey('bib.sid'), nullable=False)
-    status_id = Column(Integer, ForeignKey('status.sid'), nullable=False)
-    item_type_id = Column(Integer, ForeignKey('item_type.sid'), nullable=False)
-    barcode = Column(String(14))
-    checkouts = Column(Integer, default=0)
-    last_checkout = Column(DateTime)
-
-    def __repr__(self):
-        state = inspect(self)
-        attrs = ', '.join([
-            f'{attr.key}={attr.loaded_value!r}' for attr in state.attrs])
-        return f'<Item({attrs})>'
-
-
-class Hold(Base):
-    __tablename__ = 'hold'
-    sid = Column(Integer, primary_key=True)
-    hid = Column(Integer)
-    cart_id = Column(Integer, ForeignKey('cart.sid'))
-    item_id = Column(Integer, ForeignKey('item.sid'), nullable=False)
-    src_branch_id = Column(Integer, ForeignKey('branch.sid'), nullable=False)
-    dst_branch_id = Column(Integer, ForeignKey('branch.sid'))
+class OverflowItem(Base):
+    __tablename__ = 'overflow_item'
+    rid = Column(Integer, primary_key=True)
     timestamp = Column(DateTime, nullable=False, default=datetime.now())
-    outstanding = Column(Boolean, nullable=False, default=True)
-    issued = Column(Boolean, nullable=False, default=False)
-    fulfilled = Column(Boolean, nullable=False, default=False)
+    system_id = Column(Integer, ForeignKey('system.rid'), nullable=False)
+    cart_id = Column(Integer, ForeignKey('cart.rid'))
+    bib_id = Column(Integer, nullable=False)
+    item_id = Column(Integer, nullable=False)
+    src_branch_id = Column(Integer, ForeignKey('branch.rid'), nullable=False)
+    src_branch_shelf_id = Column(
+        Integer, ForeignKey('shelf_code.rid'), nullable=False)
+    dst_branch_id = Column(Integer, ForeignKey('branch.rid'), nullable=False)
+    pub_date = Column(String(4))
+    bib_created_date = Column(Date)
+    item_created_date = Column(Date)
+    mat_cat_id = Column(Integer, ForeignKey('mat_cat.rid'), nullable=False)
+    audn_id = Column(Integer, ForeignKey('audience.rid'), nullable=False)
+    lang_id = Column(Integer, ForeignKey('language.rid'), nullable=False)
+    item_id = Column(Integer, ForeignKey('item_type.rid'), nullable=False)
+    last_out_date = Column(String(20), default=None)
+    total_checkouts = Column(Integer, default=0)
+    total_renewals = Column(Integer, default=0)
 
     def __repr__(self):
         state = inspect(self)
         attrs = ', '.join([
             f'{attr.key}={attr.loaded_value!r}' for attr in state.attrs])
-        return f'<Hold({attrs})>'
+        return f'<Stats({attrs})>'
 
 
 class DataAccessLayer:
@@ -233,33 +212,45 @@ def create_datastore():
     Base.metadata.create_all(engine)
 
     with session_scope() as session:
-        for code, values in AUDN_CODES.items():
-            insert(
-                session, Audience, sid=values[0], code=code, label=values[1])
 
-        for code, values in LANG_CODES.items():
-            insert(
-                session,
-                Language,
-                sid=values[0], code=code, label=values[1])
+        systems = [
+            {
+                'rid': 1,
+                'code': 'BKL',
+                'label': 'Brooklyn Public Library'
+            },
+            {
+                'rid': 2,
+                'code': 'NYP',
+                'label': 'New York Public Library'}]
 
-        for code, values in BRANCH_CODES.items():
+        for value in systems:
             insert(
-                session,
-                Branch,
-                sid=values[0], code=code, label=values[1])
+                session, System, **value)
 
-        for code, values in REBALANCE_CATS.items():
-            insert(
-                session,
-                MatCat,
-                sid=values[0], code=code, label=values[1])
+        with open('./data/audiences.json', 'r') as jsonfile:
+            data = json.load(jsonfile)
+            for value in data:
+                insert(
+                    session, Audience, **value)
 
-        for code, values in STATUS_CODES.items():
-            insert(
-                session,
-                Status,
-                sid=values[0], code=code, label=values[1])
+        with open('./data/branches.json', 'r') as jsonfile:
+            data = json.load(jsonfile)
+            for value in data:
+                insert(
+                    session, Branch, **value)
+
+        with open('./data/categories.json', 'r') as jsonfile:
+            data = json.load(jsonfile)
+            for value in data:
+                insert(
+                    session, MatCat, **value)
+
+        with open('./data/languages.json', 'r') as jsonfile:
+            data = json.load(jsonfile)
+            for value in data:
+                insert(
+                    session, Language, **value)
 
 
 if __name__ == '__main__':

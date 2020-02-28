@@ -1,0 +1,127 @@
+[
+    {
+        "code": null,
+        "label": "NONE",
+        "rid": 1
+    },
+    {
+        "code": "ara",
+        "label": "Arabic",
+        "rid": 2
+    },
+    {
+        "code": "ben",
+        "label": "Bengali",
+        "rid": 3
+    },
+    {
+        "code": "chi",
+        "label": "Chinese",
+        "rid": 4
+    },
+    {
+        "code": "eng",
+        "label": "English",
+        "rid": 5
+    },
+    {
+        "code": "fre",
+        "label": "French",
+        "rid": 6
+    },
+    {
+        "code": "ger",
+        "label": "German",
+        "rid": 7
+    },
+    {
+        "code": "heb",
+        "label": "Hebrew",
+        "rid": 8
+    },
+    {
+        "code": "hin",
+        "label": "Hindi",
+        "rid": 9
+    },
+    {
+        "code": "hun",
+        "label": "Hungarian",
+        "rid": 10
+    },
+    {
+        "code": "ita",
+        "label": "Italian",
+        "rid": 11
+    },
+    {
+        "code": "jpn",
+        "label": "Japanese",
+        "rid": 12
+    },
+    {
+        "code": "kor",
+        "label": "Korean",
+        "rid": 13
+    },
+    {
+        "code": "pan",
+        "label": "Panjabi",
+        "rid": 14
+    },
+    {
+        "code": "pol",
+        "label": "Polish",
+        "rid": 15
+    },
+    {
+        "code": "por",
+        "label": "Portuguese",
+        "rid": 16
+    },
+    {
+        "code": "rus",
+        "label": "Russian",
+        "rid": 17
+    },
+    {
+        "code": "san",
+        "label": "Sanskrit",
+        "rid": 18
+    },
+    {
+        "code": "spa",
+        "label": "Spanish",
+        "rid": 19
+    },
+    {
+        "code": "ukr",
+        "label": "Ukrainian",
+        "rid": 20
+    },
+    {
+        "code": "und",
+        "label": "Undetermined",
+        "rid": 21
+    },
+    {
+        "code": "urd",
+        "label": "Urdu",
+        "rid": 22
+    },
+    {
+        "code": "yid",
+        "label": "Yiddish",
+        "rid": 23
+    },
+    {
+        "code": "hat",
+        "label": "Haitian French Creole",
+        "rid": 24
+    },
+    {
+        "code": "alb",
+        "label": "Albanian",
+        "rid": 25
+    }
+]

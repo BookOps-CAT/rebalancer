@@ -45,7 +45,7 @@ def save_cart_id(sheet_id):
 def populate_tab(creds, cart_id, sheet_id, tab_name, lang):
     if tab_name == 'Adult':
         audn_id = AUDN_CODES['a'][0]
-    elif tab_name == 'YA':
+    elif tab_name == 'Teens':
         audn_id = AUDN_CODES['y'][0]
     elif tab_name == 'Kids':
         audn_id = AUDN_CODES['j'][0]
@@ -95,7 +95,7 @@ def create_shopping_cart():
     creates a google spreadsheets and its tabs and moves it to
     shared folder
     """
-    tabs = ['Adult', 'YA', 'Kids', 'WL']
+    tabs = ['Adult', 'Teens', 'Kids', 'WL']
     creds = get_access_token()
     cart_name = name_cart()
     sheet_id = create_sheet(creds, cart_name, tabs)

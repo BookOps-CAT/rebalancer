@@ -32,7 +32,7 @@ def set_new_branch(tabs, sheet_id):
                 # find row with actual data
                 if iid:
                     try:
-                        loc_code = row[7]
+                        loc_code = row[7].strip()
                         dst_branch_id = BRANCH_CODES[loc_code][0]
                     except IndexError:
                         dst_branch_id = BRANCH_CODES[None][0]

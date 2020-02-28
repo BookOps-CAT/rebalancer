@@ -1,0 +1,22 @@
+[
+    {
+        "code": null,
+        "label": "NONE",
+        "rid": 1
+    },
+    {
+        "code": "a",
+        "label": "Adult",
+        "rid": 2
+    },
+    {
+        "code": "j",
+        "label": "Kids",
+        "rid": 3
+    },
+    {
+        "code": "y",
+        "label": "Teens",
+        "rid": 4
+    }
+]
