@@ -116,7 +116,8 @@ class ItemType(Base):
         UniqueConstraint('code', 'system_id', name='uix_itemtype'), )
     rid = Column(Integer, primary_key=True)
     system_id = Column(Integer, ForeignKey('system.rid'), nullable=False)
-    code = Column(String(3), unique=True)
+    code = Column(Integer, nullable=False)
+    label = Column(String(50))
 
     def __repr__(self):
         state = inspect(self)
@@ -251,6 +252,12 @@ def create_datastore():
             for value in data:
                 insert(
                     session, Language, **value)
+
+        with open('./data/item-types.json', 'r') as jsonfile:
+            data = json.load(jsonfile)
+            for value in data:
+                insert(
+                    session, ItemType, **value)
 
 
 if __name__ == '__main__':
