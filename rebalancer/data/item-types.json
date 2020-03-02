@@ -1,0 +1,1094 @@
+[
+    {
+        "rid": 1,
+        "system_id": "1",
+        "code": "0",
+        "label": "Undefined (Do not Use)"
+    },
+    {
+        "rid": 2,
+        "system_id": "1",
+        "code": "1",
+        "label": "Adult /YA Hardcover /Trade Books"
+    },
+    {
+        "rid": 3,
+        "system_id": "1",
+        "code": "2",
+        "label": "Adult/YA Paperback Books"
+    },
+    {
+        "rid": 4,
+        "system_id": "1",
+        "code": "3",
+        "label": "Juvenile Hardcover/Trade Books"
+    },
+    {
+        "rid": 5,
+        "system_id": "1",
+        "code": "4",
+        "label": "Juvenile Paperback Books"
+    },
+    {
+        "rid": 6,
+        "system_id": "1",
+        "code": "5",
+        "label": "Adult/YA Periodicals"
+    },
+    {
+        "rid": 7,
+        "system_id": "1",
+        "code": "6",
+        "label": "Juvenile Periodicals"
+    },
+    {
+        "rid": 8,
+        "system_id": "1",
+        "code": "7",
+        "label": "Adult 7-Day Books (Do not use)"
+    },
+    {
+        "rid": 9,
+        "system_id": "1",
+        "code": "8",
+        "label": "Juvenile 7-Day Books (Do not use)"
+    },
+    {
+        "rid": 10,
+        "system_id": "1",
+        "code": "9",
+        "label": "Adult/YA Large Print"
+    },
+    {
+        "rid": 11,
+        "system_id": "1",
+        "code": "10",
+        "label": "Adult/YA Audiobooks"
+    },
+    {
+        "rid": 12,
+        "system_id": "1",
+        "code": "11",
+        "label": "Juvenile Audiobooks"
+    },
+    {
+        "rid": 13,
+        "system_id": "1",
+        "code": "12",
+        "label": "Adult/YA Book & CD"
+    },
+    {
+        "rid": 14,
+        "system_id": "1",
+        "code": "13",
+        "label": "Juvenile Book & CD"
+    },
+    {
+        "rid": 15,
+        "system_id": "1",
+        "code": "14",
+        "label": "Adult/YA Vidocassettes"
+    },
+    {
+        "rid": 16,
+        "system_id": "1",
+        "code": "15",
+        "label": "Juvenile Videocassettes"
+    },
+    {
+        "rid": 17,
+        "system_id": "1",
+        "code": "16",
+        "label": "Book & DVD/Video"
+    },
+    {
+        "rid": 18,
+        "system_id": "1",
+        "code": "17",
+        "label": "Audiocassettes"
+    },
+    {
+        "rid": 19,
+        "system_id": "1",
+        "code": "18",
+        "label": "Adult/YA DVD"
+    },
+    {
+        "rid": 20,
+        "system_id": "1",
+        "code": "19",
+        "label": "Adult/YA CD"
+    },
+    {
+        "rid": 21,
+        "system_id": "1",
+        "code": "20",
+        "label": "CD-Rom Software"
+    },
+    {
+        "rid": 22,
+        "system_id": "1",
+        "code": "21",
+        "label": "Software (Do not use)"
+    },
+    {
+        "rid": 23,
+        "system_id": "1",
+        "code": "22",
+        "label": "Maps"
+    },
+    {
+        "rid": 24,
+        "system_id": "1",
+        "code": "23",
+        "label": "Pictures (Do not use)"
+    },
+    {
+        "rid": 25,
+        "system_id": "1",
+        "code": "24",
+        "label": "Pamphlets"
+    },
+    {
+        "rid": 26,
+        "system_id": "1",
+        "code": "25",
+        "label": "Realia"
+    },
+    {
+        "rid": 27,
+        "system_id": "1",
+        "code": "26",
+        "label": "Music Scores"
+    },
+    {
+        "rid": 28,
+        "system_id": "1",
+        "code": "27",
+        "label": "Orchestra Scores (Do not use)"
+    },
+    {
+        "rid": 29,
+        "system_id": "1",
+        "code": "28",
+        "label": "Sheet Music (Do not use)"
+    },
+    {
+        "rid": 30,
+        "system_id": "1",
+        "code": "29",
+        "label": "Libretti"
+    },
+    {
+        "rid": 31,
+        "system_id": "1",
+        "code": "30",
+        "label": "Brooklyn Botanic Garden pass (Do not use)"
+    },
+    {
+        "rid": 32,
+        "system_id": "1",
+        "code": "31",
+        "label": "TTY Device"
+    },
+    {
+        "rid": 33,
+        "system_id": "1",
+        "code": "32",
+        "label": "Bag (Do not use)"
+    },
+    {
+        "rid": 34,
+        "system_id": "1",
+        "code": "33",
+        "label": "Shopping Basket (Do not use)"
+    },
+    {
+        "rid": 35,
+        "system_id": "1",
+        "code": "34",
+        "label": "Reference/Lib Use Only"
+    },
+    {
+        "rid": 36,
+        "system_id": "1",
+        "code": "35",
+        "label": "3-Day Video (Do not use)"
+    },
+    {
+        "rid": 37,
+        "system_id": "1",
+        "code": "36",
+        "label": "ILL (Do not use)"
+    },
+    {
+        "rid": 38,
+        "system_id": "1",
+        "code": "37",
+        "label": "21-day Juvenile No-Hold (Do not use)"
+    },
+    {
+        "rid": 39,
+        "system_id": "1",
+        "code": "38",
+        "label": "Book Discuss No-Hold"
+    },
+    {
+        "rid": 40,
+        "system_id": "1",
+        "code": "39",
+        "label": "Juvenile DVD"
+    },
+    {
+        "rid": 41,
+        "system_id": "1",
+        "code": "40",
+        "label": "Ali Pre-GED ESOL"
+    },
+    {
+        "rid": 42,
+        "system_id": "1",
+        "code": "41",
+        "label": "Orchestra Collection"
+    },
+    {
+        "rid": 43,
+        "system_id": "1",
+        "code": "42",
+        "label": "Juvenile CD"
+    },
+    {
+        "rid": 44,
+        "system_id": "1",
+        "code": "43",
+        "label": "Electronic Resources"
+    },
+    {
+        "rid": 45,
+        "system_id": "1",
+        "code": "48",
+        "label": "Juvenile Large Print"
+    },
+    {
+        "rid": 46,
+        "system_id": "2",
+        "code": "0",
+        "label": "default"
+    },
+    {
+        "rid": 47,
+        "system_id": "2",
+        "code": "1",
+        "label": "non-circ"
+    },
+    {
+        "rid": 48,
+        "system_id": "2",
+        "code": "2",
+        "label": "book non-circ"
+    },
+    {
+        "rid": 49,
+        "system_id": "2",
+        "code": "3",
+        "label": "serial"
+    },
+    {
+        "rid": 50,
+        "system_id": "2",
+        "code": "4",
+        "label": "serial, loose"
+    },
+    {
+        "rid": 51,
+        "system_id": "2",
+        "code": "5",
+        "label": "serial, loose, 1 hour"
+    },
+    {
+        "rid": 52,
+        "system_id": "2",
+        "code": "6",
+        "label": "microfilm service copy"
+    },
+    {
+        "rid": 53,
+        "system_id": "2",
+        "code": "7",
+        "label": "printed music, non-circ"
+    },
+    {
+        "rid": 54,
+        "system_id": "2",
+        "code": "8",
+        "label": "manuscript music"
+    },
+    {
+        "rid": 55,
+        "system_id": "2",
+        "code": "9",
+        "label": "map"
+    },
+    {
+        "rid": 56,
+        "system_id": "2",
+        "code": "10",
+        "label": "map, manuscript"
+    },
+    {
+        "rid": 57,
+        "system_id": "2",
+        "code": "11",
+        "label": "videorecording, non-circ"
+    },
+    {
+        "rid": 58,
+        "system_id": "2",
+        "code": "12",
+        "label": "musical sound recording"
+    },
+    {
+        "rid": 59,
+        "system_id": "2",
+        "code": "13",
+        "label": "spoken sound recording"
+    },
+    {
+        "rid": 60,
+        "system_id": "2",
+        "code": "14",
+        "label": "moving image"
+    },
+    {
+        "rid": 61,
+        "system_id": "2",
+        "code": "15",
+        "label": "flat graphic"
+    },
+    {
+        "rid": 62,
+        "system_id": "2",
+        "code": "16",
+        "label": "computer file"
+    },
+    {
+        "rid": 63,
+        "system_id": "2",
+        "code": "17",
+        "label": "kit"
+    },
+    {
+        "rid": 64,
+        "system_id": "2",
+        "code": "18",
+        "label": "mixed medium collection"
+    },
+    {
+        "rid": 65,
+        "system_id": "2",
+        "code": "19",
+        "label": "3-D object"
+    },
+    {
+        "rid": 66,
+        "system_id": "2",
+        "code": "20",
+        "label": "manuscript"
+    },
+    {
+        "rid": 67,
+        "system_id": "2",
+        "code": "21",
+        "label": "archival material"
+    },
+    {
+        "rid": 68,
+        "system_id": "2",
+        "code": "22",
+        "label": "clipping files"
+    },
+    {
+        "rid": 69,
+        "system_id": "2",
+        "code": "23",
+        "label": "archival sound recording"
+    },
+    {
+        "rid": 70,
+        "system_id": "2",
+        "code": "24",
+        "label": "archival video recording"
+    },
+    {
+        "rid": 71,
+        "system_id": "2",
+        "code": "25",
+        "label": "atlas"
+    },
+    {
+        "rid": 72,
+        "system_id": "2",
+        "code": "26",
+        "label": "microfiche"
+    },
+    {
+        "rid": 73,
+        "system_id": "2",
+        "code": "27",
+        "label": "preservation master negative"
+    },
+    {
+        "rid": 74,
+        "system_id": "2",
+        "code": "28",
+        "label": "printing master negative"
+    },
+    {
+        "rid": 75,
+        "system_id": "2",
+        "code": "29",
+        "label": "bundled materials (vols.)"
+    },
+    {
+        "rid": 76,
+        "system_id": "2",
+        "code": "30",
+        "label": "loose newspaper"
+    },
+    {
+        "rid": 77,
+        "system_id": "2",
+        "code": "31",
+        "label": "google project, non-circ"
+    },
+    {
+        "rid": 78,
+        "system_id": "2",
+        "code": "32",
+        "label": "google project, book"
+    },
+    {
+        "rid": 79,
+        "system_id": "2",
+        "code": "33",
+        "label": "google project, serial"
+    },
+    {
+        "rid": 80,
+        "system_id": "2",
+        "code": "34",
+        "label": "micro-opaque"
+    },
+    {
+        "rid": 81,
+        "system_id": "2",
+        "code": "35",
+        "label": "cd-rom, dvd-rom"
+    },
+    {
+        "rid": 82,
+        "system_id": "2",
+        "code": "36",
+        "label": "www based"
+    },
+    {
+        "rid": 83,
+        "system_id": "2",
+        "code": "37",
+        "label": "master recording"
+    },
+    {
+        "rid": 84,
+        "system_id": "2",
+        "code": "38",
+        "label": "art and artifacts"
+    },
+    {
+        "rid": 85,
+        "system_id": "2",
+        "code": "41",
+        "label": "internet archive, non-circ"
+    },
+    {
+        "rid": 86,
+        "system_id": "2",
+        "code": "42",
+        "label": "internet archive, book"
+    },
+    {
+        "rid": 87,
+        "system_id": "2",
+        "code": "43",
+        "label": "internet archive, serial"
+    },
+    {
+        "rid": 88,
+        "system_id": "2",
+        "code": "50",
+        "label": "offsite requesting (ncip)"
+    },
+    {
+        "rid": 89,
+        "system_id": "2",
+        "code": "51",
+        "label": "i-archive/google non-circ"
+    },
+    {
+        "rid": 90,
+        "system_id": "2",
+        "code": "52",
+        "label": "i-archive/google monograph"
+    },
+    {
+        "rid": 91,
+        "system_id": "2",
+        "code": "53",
+        "label": "i-archive/google serial"
+    },
+    {
+        "rid": 92,
+        "system_id": "2",
+        "code": "55",
+        "label": "book, limited circ, MaRLI"
+    },
+    {
+        "rid": 93,
+        "system_id": "2",
+        "code": "57",
+        "label": "printed music limited circ MaRLI"
+    },
+    {
+        "rid": 94,
+        "system_id": "2",
+        "code": "60",
+        "label": "pamphlets, singles, 1-50 pages"
+    },
+    {
+        "rid": 95,
+        "system_id": "2",
+        "code": "61",
+        "label": "pamphlet volumes, bound with"
+    },
+    {
+        "rid": 96,
+        "system_id": "2",
+        "code": "65",
+        "label": "book, good condition, non-MaRLI"
+    },
+    {
+        "rid": 97,
+        "system_id": "2",
+        "code": "66",
+        "label": "book, poor condition, non-MaRLI"
+    },
+    {
+        "rid": 98,
+        "system_id": "2",
+        "code": "67",
+        "label": "printed music, good, non-MaRLI"
+    },
+    {
+        "rid": 99,
+        "system_id": "2",
+        "code": "68",
+        "label": "printed music, poor, non-MaRLI"
+    },
+    {
+        "rid": 100,
+        "system_id": "2",
+        "code": "79",
+        "label": "Interlibrary Loan - Research"
+    },
+    {
+        "rid": 101,
+        "system_id": "2",
+        "code": "101",
+        "label": "Book, circ"
+    },
+    {
+        "rid": 102,
+        "system_id": "2",
+        "code": "102",
+        "label": "Book, paperback"
+    },
+    {
+        "rid": 103,
+        "system_id": "2",
+        "code": "103",
+        "label": "Book, express"
+    },
+    {
+        "rid": 104,
+        "system_id": "2",
+        "code": "104",
+        "label": "Reference non-circ Book,PER,etc."
+    },
+    {
+        "rid": 105,
+        "system_id": "2",
+        "code": "105",
+        "label": "Pamphlet"
+    },
+    {
+        "rid": 106,
+        "system_id": "2",
+        "code": "106",
+        "label": "Center for reading/writing"
+    },
+    {
+        "rid": 107,
+        "system_id": "2",
+        "code": "107",
+        "label": "Periodical, circ, serial"
+    },
+    {
+        "rid": 108,
+        "system_id": "2",
+        "code": "108",
+        "label": "Lpa score"
+    },
+    {
+        "rid": 109,
+        "system_id": "2",
+        "code": "109",
+        "label": "Lpa song index score"
+    },
+    {
+        "rid": 110,
+        "system_id": "2",
+        "code": "110",
+        "label": "VHS"
+    },
+    {
+        "rid": 111,
+        "system_id": "2",
+        "code": "111",
+        "label": "DVD"
+    },
+    {
+        "rid": 112,
+        "system_id": "2",
+        "code": "112",
+        "label": "DVD express"
+    },
+    {
+        "rid": 113,
+        "system_id": "2",
+        "code": "113",
+        "label": "VCD"
+    },
+    {
+        "rid": 114,
+        "system_id": "2",
+        "code": "114",
+        "label": "Compact disc"
+    },
+    {
+        "rid": 115,
+        "system_id": "2",
+        "code": "115",
+        "label": "Cd express"
+    },
+    {
+        "rid": 116,
+        "system_id": "2",
+        "code": "116",
+        "label": "Audiocassette"
+    },
+    {
+        "rid": 117,
+        "system_id": "2",
+        "code": "117",
+        "label": "Book, circ, 2-Week, New"
+    },
+    {
+        "rid": 118,
+        "system_id": "2",
+        "code": "118",
+        "label": "Recorded book"
+    },
+    {
+        "rid": 119,
+        "system_id": "2",
+        "code": "119",
+        "label": "Software"
+    },
+    {
+        "rid": 120,
+        "system_id": "2",
+        "code": "120",
+        "label": "Picture"
+    },
+    {
+        "rid": 121,
+        "system_id": "2",
+        "code": "121",
+        "label": "Mixed media set"
+    },
+    {
+        "rid": 122,
+        "system_id": "2",
+        "code": "122",
+        "label": "Cd-rom"
+    },
+    {
+        "rid": 123,
+        "system_id": "2",
+        "code": "123",
+        "label": "Game express"
+    },
+    {
+        "rid": 124,
+        "system_id": "2",
+        "code": "124",
+        "label": "E-nypl book"
+    },
+    {
+        "rid": 125,
+        "system_id": "2",
+        "code": "125",
+        "label": "E-nypl audio book"
+    },
+    {
+        "rid": 126,
+        "system_id": "2",
+        "code": "126",
+        "label": "E-nypl music"
+    },
+    {
+        "rid": 127,
+        "system_id": "2",
+        "code": "127",
+        "label": "E-nypl video"
+    },
+    {
+        "rid": 128,
+        "system_id": "2",
+        "code": "128",
+        "label": "Wireless laptop"
+    },
+    {
+        "rid": 129,
+        "system_id": "2",
+        "code": "129",
+        "label": "Borrowed ILL"
+    },
+    {
+        "rid": 130,
+        "system_id": "2",
+        "code": "130",
+        "label": "Equipment"
+    },
+    {
+        "rid": 131,
+        "system_id": "2",
+        "code": "131",
+        "label": "Adult fast add item"
+    },
+    {
+        "rid": 132,
+        "system_id": "2",
+        "code": "132",
+        "label": "RFVC - FILM"
+    },
+    {
+        "rid": 133,
+        "system_id": "2",
+        "code": "133",
+        "label": "RFVC - FILM PRESERVATION"
+    },
+    {
+        "rid": 134,
+        "system_id": "2",
+        "code": "134",
+        "label": "RFVC - VHS"
+    },
+    {
+        "rid": 135,
+        "system_id": "2",
+        "code": "135",
+        "label": "RFVC - DVD"
+    },
+    {
+        "rid": 136,
+        "system_id": "2",
+        "code": "136",
+        "label": "Leased book 2-Week, New"
+    },
+    {
+        "rid": 137,
+        "system_id": "2",
+        "code": "137",
+        "label": "Leased book, express"
+    },
+    {
+        "rid": 138,
+        "system_id": "2",
+        "code": "138",
+        "label": "Leased book, 3-week"
+    },
+    {
+        "rid": 139,
+        "system_id": "2",
+        "code": "139",
+        "label": "Chrome book"
+    },
+    {
+        "rid": 140,
+        "system_id": "2",
+        "code": "140",
+        "label": "Blu-ray"
+    },
+    {
+        "rid": 141,
+        "system_id": "2",
+        "code": "141",
+        "label": "Blu-ray express"
+    },
+    {
+        "rid": 142,
+        "system_id": "2",
+        "code": "142",
+        "label": "RFVC - LPA Blu-ray"
+    },
+    {
+        "rid": 143,
+        "system_id": "2",
+        "code": "143",
+        "label": "ELL book, iZone at AG,IN,MH,SE"
+    },
+    {
+        "rid": 144,
+        "system_id": "2",
+        "code": "144",
+        "label": "Lpa orchestra collection"
+    },
+    {
+        "rid": 145,
+        "system_id": "2",
+        "code": "150",
+        "label": "Clear WiFi Access Point"
+    },
+    {
+        "rid": 146,
+        "system_id": "2",
+        "code": "155",
+        "label": "Read-Along Book"
+    },
+    {
+        "rid": 147,
+        "system_id": "2",
+        "code": "201",
+        "label": "J book"
+    },
+    {
+        "rid": 148,
+        "system_id": "2",
+        "code": "202",
+        "label": "J recorded book"
+    },
+    {
+        "rid": 149,
+        "system_id": "2",
+        "code": "203",
+        "label": "J compact disc"
+    },
+    {
+        "rid": 150,
+        "system_id": "2",
+        "code": "204",
+        "label": "J cd-rom"
+    },
+    {
+        "rid": 151,
+        "system_id": "2",
+        "code": "205",
+        "label": "J audiocassette"
+    },
+    {
+        "rid": 152,
+        "system_id": "2",
+        "code": "206",
+        "label": "J DVD"
+    },
+    {
+        "rid": 153,
+        "system_id": "2",
+        "code": "207",
+        "label": "J fast add item"
+    },
+    {
+        "rid": 154,
+        "system_id": "2",
+        "code": "208",
+        "label": "J game express"
+    },
+    {
+        "rid": 155,
+        "system_id": "2",
+        "code": "209",
+        "label": "J mixed media set"
+    },
+    {
+        "rid": 156,
+        "system_id": "2",
+        "code": "210",
+        "label": "J long playing record"
+    },
+    {
+        "rid": 157,
+        "system_id": "2",
+        "code": "211",
+        "label": "J paperback"
+    },
+    {
+        "rid": 158,
+        "system_id": "2",
+        "code": "212",
+        "label": "J periodical"
+    },
+    {
+        "rid": 159,
+        "system_id": "2",
+        "code": "213",
+        "label": "J reference"
+    },
+    {
+        "rid": 160,
+        "system_id": "2",
+        "code": "214",
+        "label": "J software"
+    },
+    {
+        "rid": 161,
+        "system_id": "2",
+        "code": "215",
+        "label": "J videocassette"
+    },
+    {
+        "rid": 162,
+        "system_id": "2",
+        "code": "216",
+        "label": "J DVD express"
+    },
+    {
+        "rid": 163,
+        "system_id": "2",
+        "code": "217",
+        "label": "J Blu-ray"
+    },
+    {
+        "rid": 164,
+        "system_id": "2",
+        "code": "218",
+        "label": "J Blu-ray express"
+    },
+    {
+        "rid": 165,
+        "system_id": "2",
+        "code": "219",
+        "label": "J ELL book at AG IN MH SE"
+    },
+    {
+        "rid": 166,
+        "system_id": "2",
+        "code": "220",
+        "label": "J pre-k book"
+    },
+    {
+        "rid": 167,
+        "system_id": "2",
+        "code": "221",
+        "label": "J Tablet - LaunchPads"
+    },
+    {
+        "rid": 168,
+        "system_id": "2",
+        "code": "230",
+        "label": "YA DVD express"
+    },
+    {
+        "rid": 169,
+        "system_id": "2",
+        "code": "231",
+        "label": "YA book"
+    },
+    {
+        "rid": 170,
+        "system_id": "2",
+        "code": "232",
+        "label": "YA recorded book"
+    },
+    {
+        "rid": 171,
+        "system_id": "2",
+        "code": "233",
+        "label": "YA CD"
+    },
+    {
+        "rid": 172,
+        "system_id": "2",
+        "code": "234",
+        "label": "YA CD express"
+    },
+    {
+        "rid": 173,
+        "system_id": "2",
+        "code": "235",
+        "label": "YA DVD"
+    },
+    {
+        "rid": 174,
+        "system_id": "2",
+        "code": "236",
+        "label": "YA game express"
+    },
+    {
+        "rid": 175,
+        "system_id": "2",
+        "code": "237",
+        "label": "YA pamphlet"
+    },
+    {
+        "rid": 176,
+        "system_id": "2",
+        "code": "238",
+        "label": "YA paperback"
+    },
+    {
+        "rid": 177,
+        "system_id": "2",
+        "code": "239",
+        "label": "YA periodical"
+    },
+    {
+        "rid": 178,
+        "system_id": "2",
+        "code": "240",
+        "label": "YA Blu-ray"
+    },
+    {
+        "rid": 179,
+        "system_id": "2",
+        "code": "241",
+        "label": "YA Blu-ray express"
+    },
+    {
+        "rid": 180,
+        "system_id": "2",
+        "code": "242",
+        "label": "YA ELL book at AG IN MH SE"
+    },
+    {
+        "rid": 181,
+        "system_id": "2",
+        "code": "252",
+        "label": "Teacher Set (DOE EDUCATOR ONLY)"
+    },
+    {
+        "rid": 182,
+        "system_id": "2",
+        "code": "253",
+        "label": "Teacher Set Playaway"
+    }
+]
