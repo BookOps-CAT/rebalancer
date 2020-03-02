@@ -34,7 +34,9 @@ from datetime import datetime
 import re
 
 
-from datastore import session_scope, Branch, OverflowItem, ItemType, ShelfCode
+from datastore import (session_scope, Audience, Branch, Language,
+                       OverflowItem,
+                       ItemType, ShelfCode)
 from datastore_transactions import create_code_idx, insert
 
 RowData = namedtuple(
@@ -119,13 +121,38 @@ def determine_nyp_mat_cat(call_no):
             return p
 
 
-def get_mat_cat_id(call_no, opac_msg, system_id):
+def get_mat_cat_id(call_no, opac_msg, system_id, mat_cat_idx):
     if system_id == 1:
         # BPL
         pass
     elif system_id == 2:
         # NYPL
         mat_cat = determine_nyp_mat_cat(call_no)
+        mat_cat_id = mat_cat_idx[mat_cat]
+
+    return mat_cat_id
+
+
+def get_audience_id(location, audn_idx):
+    audn = location[2].strip()
+    try:
+        return audn_idx[audn]
+    except KeyError:
+        return audn_idx[None]
+
+
+def get_language_id(call_no, lang_idx):
+    found = False
+    for code in lang_idx.keys():
+        if code in call_no.replace('-', ' ').lower().split(' '):
+            found = True
+            return lang_idx[code]
+    if not found:
+        return lang_idx['eng']
+
+
+def get_itemtype_id(item_type, itemtype_idx):
+    return itemtype_idx[int(item_type)]
 
 
 def sierra_export_reader(fh):
@@ -145,6 +172,11 @@ def save2store(fh, system_id):
     data = sierra_export_reader(fh)
     with session_scope() as session:
         branch_idx = create_code_idx(session, Branch, system_id=system_id)
+        mat_cat_idx = create_code_idx(session, MatCat, system_id=system_id)
+        audn_idx = create_code_idx(session, Audience)
+        lang_idx = create_code_idx(session, Language)
+        itemtype_idx = create_code_idx(session, ItemType, system_id=system_id)
+
         for k, v in branch_idx.items():
             print(k, v)
 
@@ -154,38 +186,19 @@ def save2store(fh, system_id):
                 system_id=system_id,
                 bib_id=prep_ids(element.bib_id),
                 item_id=prep_ids(element.item_id),
-                src_branch_id=determine_branch_id(element.location, branch_idx),
+                src_branch_id=determine_branch_id(
+                    element.location, branch_idx),
                 pub_date=parse_pub_date(element.pub_info),
                 bib_created_date=string2date(element.bib_created_date),
                 item_created_date=string2date(element.item_created_data),
-                mat_cat_id=None
-                )
+                mat_cat_id=get_mat_cat_id(
+                    element.call_no, element.opac_msg, system_id, mat_cat_idx),
+                audn_id = determine_audience(element.location),
+                lang_id = determine_language(element.call_no),
+                item_type_id=None)
 
 
             # session.commit()
-
-
-
-
-# def find_nth_value(field, n):
-#     return field.split('~')[n]
-
-
-# def determine_mat_category(call_no):
-#     call_no = find_nth_value(call_no, 0)
-#     for p, v in CALL_PATTERNS.items():
-#         m = v.search(call_no)
-#         if m:
-#             return p
-
-
-# def determine_audience_id(location):
-#     try:
-#         audn_id = AUDN_CODES[location[2]][0]
-#     except KeyError:
-#         # eng code id is 4
-#         audn_id = 4
-#     return audn_id
 
 
 # def determine_language(call_no):
