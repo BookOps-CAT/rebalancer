@@ -153,6 +153,8 @@ class OverflowItem(Base):
     system_id = Column(Integer, ForeignKey('system.rid'), nullable=False)
     cart_id = Column(Integer, ForeignKey('cart.rid'))
     bib_id = Column(Integer, nullable=False)
+    title = Column(String(200), nullable=False)
+    author = Column(String(150))
     item_id = Column(Integer, nullable=False)
     src_branch_id = Column(Integer, ForeignKey('branch.rid'), nullable=False)
     src_branch_shelf_id = Column(

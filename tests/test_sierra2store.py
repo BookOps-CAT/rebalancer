@@ -17,6 +17,47 @@ def test_pares_ids_when_id_is_string():
     assert sierra2store.prep_ids('some string') is None
 
 
+def test_prep_title():
+    assert sierra2store.prep_title(
+        '880-01 Bozhii pristani : rasskazy palomnikov.') == 'Bozhii pristani : rasskazy palomnikov.'
+    assert sierra2store.prep_title(
+        'Los cimientos del cielo / Juan Miguel Zunzunegui.') == 'Los cimientos del cielo'
+    assert sierra2store.prep_title(
+        '880-02 Tie xue zhan jiang / Zhuqian.') == 'Tie xue zhan jiang'
+
+
+def test_prep_title_long():
+    assert len(sierra2store.prep_title(
+        'Test title' * 200)) == 200
+
+
+def test_prep_author():
+    assert sierra2store.prep_author(
+        '880-01 Backman, Fredrik, 1981- author.') == 'Backman, Fredrik, 1981-'
+    assert sierra2store.prep_author(
+        '880-01 Zhuqian.') == 'Zhuqian'
+    assert sierra2store.prep_author(
+        'Keai.') == 'Keai'
+    assert sierra2store.prep_author(
+        'Denning, G. S. (Gabriel), author.') == 'Denning, G. S. (Gabriel)'
+    assert sierra2store.prep_author(
+        'Leon, Donna, author.') == 'Leon, Donna'
+    assert sierra2store.prep_author(
+        'Higashimura, Akiko, author, artist.') == 'Higashimura, Akiko'
+    assert sierra2store.prep_author(
+        'Krosoczka, Jarrett, author, illustrator.') == 'Krosoczka, Jarrett'
+
+
+def test_prep_author_empty_string():
+    assert sierra2store.prep_author(
+        '') is None
+
+
+def test_prep_author_long():
+    assert len(sierra2store.prep_author(
+        'Author' * 150)) == 150
+
+
 def test_parse_pub_date_positive():
     assert sierra2store.parse_pub_date(
         'New York : Thomas Dunne Books, 2017.') == '2017'
@@ -92,6 +133,21 @@ def test_get_itemtype_id():
         0: 46,
         101: 101,
     }
+    assert sierra2store.get_itemtype_id(
+        '101', itemtype_idx) == 101
+    assert sierra2store.get_itemtype_id(
+        101, itemtype_idx) == 101
+    assert sierra2store.get_itemtype_id(
+        '5', itemtype_idx) == 46
+
+
+def test_string2int():
+    assert sierra2store.string2int(
+        '2') == 2
+    assert sierra2store.string2int(
+        2) == 2
+    assert sierra2store.string2int(
+        'a') == 0
 
 
 def test_determine_nyp_mat_cat_for_general_fiction():
@@ -295,3 +351,108 @@ def test_determine_nyp_mat_cat_for_undefined():
         'PER') is None
     assert sierra2store.determine_nyp_mat_cat(
         'J PER') is None
+
+
+def test_determine_bpl_mat_cat_for_empty_call_no_string():
+    assert sierra2store.determine_bpl_mat_cat(
+        '', '87awl', '-') is None
+
+
+def test_determine_bpl_mat_cat_for_general_fiction():
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC ADAMS', '14afc', '-') == 'fi'
+    assert sierra2store.determine_bpl_mat_cat(
+        'POL FIC ADAMS', '41awl', '-') == 'fi'
+    assert sierra2store.determine_bpl_mat_cat(
+        'RUS J FIC LAGIN', '41awl', '-') == 'fi'
+
+    # short stories treated as general ficiton
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC WURZBACHER', '47ash', 'y') == 'fi'
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC C', '87afc', 'y') == 'fi'
+
+    # deck book
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC ASIMOV', '14adk', 's') == 'fi'
+
+
+def test_determine_bpl_mat_cat_for_science_fiction():
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC COREY', '14asf', 's') == 'sf'
+
+
+def test_determine_bpl_mat_cat_for_mystery():
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC MACRAE', '42afc', 'm') == 'my'
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC MACRAE', '42amy', 'm') == 'my'
+
+
+def test_determine_bpl_mat_cat_for_bridge_books():
+    assert sierra2store.determine_bpl_mat_cat(
+        'J FIC COVEN', '45jfc', 'k') == 'yr'
+
+
+def test_determine_bpl_mat_cat_for_graphic_novel():
+    assert sierra2store.determine_bpl_mat_cat(
+        'J FIC STILTON', '45jfc', 'u') == 'gn'
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC PANETTA', '03yfc', 'u') == 'gn'
+
+
+def test_determine_bpl_mat_cat_for_incorrectly_coded_graphic_novel():
+    assert sierra2store.determine_bpl_mat_cat(
+        'J 641.815 K', '03',  'u') == 'd6'
+
+
+def test_determine_bpl_mat_cat_for_romances():
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC CHAPMAN', '14apb', 'n') == 'rm'
+
+
+def test_determine_bpl_mat_cat_for_large_print():
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC CARCATERRA', '90alp', 'l') == 'lp'
+    assert sierra2store.determine_bpl_mat_cat(
+        '306.362 W', '90alp', 'l') == 'lp'
+    assert sierra2store.determine_bpl_mat_cat(
+        'B MOORE M', '90alp', 'l') == 'lp'
+
+
+def test_determine_bpl_mat_cat_for_biography():
+    assert sierra2store.determine_bpl_mat_cat(
+        'J B PAYNE C', '62jbi', '-') == 'bi'
+    assert sierra2store.determine_bpl_mat_cat(
+        'B BROWN B', '62abi', '-') == 'bi'
+    assert sierra2store.determine_bpl_mat_cat(
+        'RUS B GUBERMAN G', '42awl', '-') == 'bi'
+
+
+def test_determine_bpl_mat_cat_for_picture_books():
+    assert sierra2store.determine_bpl_mat_cat(
+        'SPA J-E GALAN', '41jwl', '-') == 'pi'
+    assert sierra2store.determine_bpl_mat_cat(
+        'POL J-E', '41jwl', '-') == 'pi'
+    assert sierra2store.determine_bpl_mat_cat(
+        'J-E', '02jje', '-') == 'pi'
+    assert sierra2store.determine_bpl_mat_cat(
+        'J-E SCIESZKA', '02jje', '-') == 'pi'
+
+
+def test_determine_bpl_mat_cat_for_early_readers():
+    assert sierra2store.determine_bpl_mat_cat(
+        'J-E SCIESZKA', '02jer', '-') == 'er'
+
+
+def test_determine_bpl_mat_cat_for_dvds():
+    assert sierra2store.determine_bpl_mat_cat(
+        'DVD', '41adv', '-') == 'dv'
+
+
+def test_determine_bpl_mat_cat_for_dewey_8xx():
+    assert sierra2store.determine_bpl_mat_cat(
+        '823.33 B K', '14anf', '-') == 'd8'
+    assert sierra2store.determine_bpl_mat_cat(
+        '823 B', '14anf', '-') == 'd8'
+

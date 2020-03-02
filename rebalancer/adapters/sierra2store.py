@@ -35,8 +35,8 @@ import re
 
 
 from datastore import (session_scope, Audience, Branch, Language,
-                       OverflowItem,
-                       ItemType, ShelfCode)
+                       ItemType, OverflowItem, MatCat,
+                       ShelfCode)
 from datastore_transactions import create_code_idx, insert
 
 RowData = namedtuple(
@@ -77,6 +77,22 @@ NYP_CALL_PATTERNS = OrderedDict(
     d9=re.compile(r'^9\d{2}.*|.*\s9\d{2}.*', re.IGNORECASE),
 )
 
+BPL_CALL_PATTERNS = OrderedDict(
+    fi=re.compile(r'.*FIC\s', re.IGNORECASE),
+    pi=re.compile(r'.*\sJ-E\s|.*J-E$', re.IGNORECASE),
+    d0=re.compile(r'^0\d{2}.*|.*\s0\d{2}.*', re.IGNORECASE),
+    d1=re.compile(r'^1\d{2}.*|.*\s1\d{2}.*', re.IGNORECASE),
+    d2=re.compile(r'^2\d{2}.*|.*\s2\d{2}.*', re.IGNORECASE),
+    d3=re.compile(r'^3\d{2}.*|.*\s3\d{2}.*', re.IGNORECASE),
+    d4=re.compile(r'^4\d{2}.*|.*\s4\d{2}.*', re.IGNORECASE),
+    d5=re.compile(r'^5\d{2}.*|.*\s5\d{2}.*', re.IGNORECASE),
+    d6=re.compile(r'^6\d{2}.*|.*\s6\d{2}.*', re.IGNORECASE),
+    d7=re.compile(r'^7\d{2}.*|.*\s7\d{2}.*', re.IGNORECASE),
+    d8=re.compile(r'^8\d{2}.*|.*\s8\d{2}.*', re.IGNORECASE),
+    d9=re.compile(r'^9\d{2}.*|.*\s9\d{2}.*', re.IGNORECASE),
+    bi=re.compile(r'^B\s.*|\sB\s.*', re.IGNORECASE)
+)
+
 
 def prep_ids(sierra_id):
     try:
@@ -85,6 +101,37 @@ def prep_ids(sierra_id):
         return
     except ValueError:
         return
+
+
+def prep_title(title):
+    title = title.strip()
+    if '880-' == title[:4]:
+        title = title[7:]
+    if ' / ' in title:
+        parts = title.split(' / ')
+        title = ' '.join(parts[:-1])
+    title = title[:200]  # datastore limit
+    return title
+
+
+def prep_author(author):
+    roles = [
+        'author',
+        'artist',
+        'illustrator'
+    ]
+    author = author.strip()
+    if '880-' in author[:4]:
+        author = author[7:]
+    for role in roles:
+        author = author.replace(role, '').strip()
+    try:
+        while author[-1] in (',', '.'):
+            author = author[:-1].strip()
+    except IndexError:
+        return None
+    author = author[:150]  # datastore limit
+    return author
 
 
 def determine_branch_id(location, branch_idx):
@@ -113,18 +160,78 @@ def string2date(date_string):
         return
 
 
+def determine_bpl_mat_cat(call_no, location, opac_msg):
+    mat_cat = None
+    shelfcode = location[3:].strip()
+    if shelfcode in ('fc', 'pb'):
+        if opac_msg == 's':
+            # science fiction
+            mat_cat = 'sf'
+        elif opac_msg == 'k':
+            # bridge book
+            mat_cat = 'yr'
+        elif opac_msg == 't':
+            # historical fiction
+            mat_cat = 'hi'
+        elif opac_msg == 'm':
+            # mystery
+            mat_cat = 'my'
+        elif opac_msg == 'n':
+            # romance
+            mat_cat = 'rm'
+        elif opac_msg == 'u':
+            # graphic novel
+            mat_cat = 'gn'
+        elif opac_msg == 'l':
+            # large print
+            mat_cat = 'lp'
+        else:
+            # general fiction
+            mat_cat = 'fi'
+    elif shelfcode == 'sf':
+        mat_cat = 'sf'
+    elif shelfcode == 'my':
+        mat_cat = 'my'
+    elif shelfcode == 'lp':
+        mat_cat = 'lp'
+    elif shelfcode == 'je':
+        # picture books
+        mat_cat = 'pi'
+    elif shelfcode == 'er':
+        # easy reader
+        mat_cat = 'er'
+    elif shelfcode == 'bi':
+        # biography
+        mat_cat = 'bi'
+    elif shelfcode == 'dv':
+        # dvd
+        mat_cat = 'dv'
+    elif shelfcode == 'cd':
+        # cds
+        mat_cat = 'cd'
+    else:
+        print(call_no)
+        for p, v in BPL_CALL_PATTERNS.items():
+            m = v.search(call_no)
+            if m:
+                mat_cat = p
+                break
+    return mat_cat
+
+
 def determine_nyp_mat_cat(call_no):
-    # call_no =
     for p, v in NYP_CALL_PATTERNS.items():
         m = v.search(call_no)
         if m:
             return p
 
 
-def get_mat_cat_id(call_no, opac_msg, system_id, mat_cat_idx):
+def get_mat_cat_id(call_no, location, opac_msg, system_id, mat_cat_idx):
     if system_id == 1:
         # BPL
-        pass
+        mat_cat = determine_bpl_mat_cat(
+            call_no, location, opac_msg, mat_cat_idx)
+        mat_cat_id = mat_cat_idx[mat_cat]
     elif system_id == 2:
         # NYPL
         mat_cat = determine_nyp_mat_cat(call_no)
@@ -152,7 +259,17 @@ def get_language_id(call_no, lang_idx):
 
 
 def get_itemtype_id(item_type, itemtype_idx):
-    return itemtype_idx[int(item_type)]
+    try:
+        return itemtype_idx[int(item_type)]
+    except KeyError:
+        return itemtype_idx[0]
+
+
+def string2int(amount):
+    try:
+        return int(amount)
+    except ValueError:
+        return 0
 
 
 def sierra_export_reader(fh):
@@ -177,14 +294,13 @@ def save2store(fh, system_id):
         lang_idx = create_code_idx(session, Language)
         itemtype_idx = create_code_idx(session, ItemType, system_id=system_id)
 
-        for k, v in branch_idx.items():
-            print(k, v)
-
         for element in data:
 
             overflow_item = dict(
                 system_id=system_id,
                 bib_id=prep_ids(element.bib_id),
+                title=prep_title(element.title),
+                author=prep_author(element.author),
                 item_id=prep_ids(element.item_id),
                 src_branch_id=determine_branch_id(
                     element.location, branch_idx),
@@ -192,46 +308,14 @@ def save2store(fh, system_id):
                 bib_created_date=string2date(element.bib_created_date),
                 item_created_date=string2date(element.item_created_data),
                 mat_cat_id=get_mat_cat_id(
-                    element.call_no, element.opac_msg, system_id, mat_cat_idx),
-                audn_id = determine_audience(element.location),
-                lang_id = determine_language(element.call_no),
-                item_type_id=None)
+                    element.call_no, element.location, element.opac_msg,
+                    system_id, mat_cat_idx),
+                audn_id=get_audience_id(element.location, audn_idx),
+                lang_id=get_language_id(element.call_no, lang_idx),
+                item_type_id=get_itemtype_id(
+                    element.item_type, itemtype_idx),
+                last_out_date=string2date(element.last_out_date),
+                total_checkouts=string2int(element.total_checkouts),
+                total_renewals=string2int(element.total_renewals))
 
-
-            # session.commit()
-
-
-# def determine_language(call_no):
-#     # J-FRE PIC ADAMS add pattern handling
-#     found = False
-#     for code in LANG_CODES.keys():
-#         if code in call_no.lower().split(' '):
-#             found = True
-#             break
-#     if found:
-#         return code
-#     else:
-#         return 'eng'
-
-
-
-# def determine_item_type_id(session, code):
-#     res = retrieve_record(
-#         session,
-#         ItemType,
-#         code=code.strip())
-
-#     if res:
-#         item_type_id = res.sid
-#     else:
-#         res = insert_or_ignore(
-#             session,
-#             ItemType,
-#             code=code.strip())
-#         session.flush()
-#         item_type_id = res.sid
-
-#     return item_type_id
-
-
-
+            insert(session, OverflowItem, **overflow_item)

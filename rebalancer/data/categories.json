@@ -52,8 +52,8 @@
     {
         "rid": 6,
         "system_id": 1,
-        "code": "ur",
-        "label": "Urban Fiction",
+        "code": "hi",
+        "label": "Historical Fiction",
         "adult_order": 5,
         "teen_order": null,
         "kids_order": null,
