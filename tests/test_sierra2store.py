@@ -51,6 +51,49 @@ def test_string2date_when_date_str_invalid():
         '2019-03-02') is None
 
 
+def test_get_audn_id():
+    audn_idx = {
+        None: 1,
+        'a': 2,
+        'j': 3,
+        'y': 4}
+    assert sierra2store.get_audience_id(
+        'vca0n', audn_idx) == 2
+    assert sierra2store.get_audience_id(
+        'saj0y', audn_idx) == 3
+    assert sierra2store.get_audience_id(
+        'mpy0n', audn_idx) == 4
+    assert sierra2store.get_audience_id(
+        'mm3an', audn_idx) == 1  # is this a correct behavior? should we combine adult and unknown?
+
+
+def test_get_language_id():
+    lang_idx = {
+        None: 1,
+        'ara': 2,
+        'chi': 4,
+        'eng': 5,
+        'spa': 19
+    }
+    assert sierra2store.get_language_id(
+        'J-Spa 630.78 R', lang_idx) == 19
+    assert sierra2store.get_language_id(
+        'J PIC ANDERSON', lang_idx) == 5
+    assert sierra2store.get_language_id(
+        'SPA GRAPHIC GN FIC KISHIMOTO', lang_idx) == 19
+    assert sierra2store.get_language_id(
+        'CHI FIC GALBRAITH', lang_idx) == 4
+    assert sierra2store.get_language_id(
+        'ARA J-E ADAMS', lang_idx) == 2
+
+
+def test_get_itemtype_id():
+    itemtype_idx = {
+        0: 46,
+        101: 101,
+    }
+
+
 def test_determine_nyp_mat_cat_for_general_fiction():
     assert sierra2store.determine_nyp_mat_cat(
         'CHI FIC JIQIU') == 'fi'
