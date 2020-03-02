@@ -163,7 +163,7 @@ class OverflowItem(Base):
     mat_cat_id = Column(Integer, ForeignKey('mat_cat.rid'), nullable=False)
     audn_id = Column(Integer, ForeignKey('audience.rid'), nullable=False)
     lang_id = Column(Integer, ForeignKey('language.rid'), nullable=False)
-    item_id = Column(Integer, ForeignKey('item_type.rid'), nullable=False)
+    item_type_id = Column(Integer, ForeignKey('item_type.rid'), nullable=False)
     last_out_date = Column(String(20), default=None)
     total_checkouts = Column(Integer, default=0)
     total_renewals = Column(Integer, default=0)
