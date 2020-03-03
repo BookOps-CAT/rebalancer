@@ -8,6 +8,9 @@ from sqlalchemy.sql import text
 # from pandas import read_sql
 
 
+from errors import RebalancerError
+
+
 def retrieve_records(session, model, **kwargs):
     instances = session.query(model).filter_by(**kwargs).order_by(
         model.rid).all()
@@ -17,7 +20,6 @@ def retrieve_records(session, model, **kwargs):
 def insert(session, model, **kwargs):
     instance = model(**kwargs)
     session.add(instance)
-    session.flush()
     return instance
 
 
@@ -27,6 +29,18 @@ def create_code_idx(session, model, **kwargs):
     branch_idx = {x.code: x.rid for x in records}
 
     return branch_idx
+
+
+def retrieve_record(session, model, **kwargs):
+    instance = session.query(model).filter_by(**kwargs).first()
+    return instance
+
+
+@lru_cache(maxsize=32)
+def retrieve_record_cached(session, model, **kwargs):
+    instance = session.query(model).filter_by(**kwargs).first()
+    return instance
+
 
 
 # def insert_or_ignore(session, model, **kwargs):
@@ -56,12 +70,6 @@ def create_code_idx(session, model, **kwargs):
 #     else:
 #         del kwargs['sid']
 #         update_record(session, model, rid, **kwargs)
-
-
-# @lru_cache(maxsize=32)
-# def retrieve_record(session, model, **kwargs):
-#     instance = session.query(model).filter_by(**kwargs).first()
-#     return instance
 
 
 # def retrieve_records(session, model, **kwargs):
