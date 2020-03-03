@@ -88,7 +88,7 @@ class ShelfCode(Base):
         UniqueConstraint('code', 'system_id', name='uix_shelfcodes'), )
     rid = Column(Integer, primary_key=True)
     system_id = Column(Integer, ForeignKey('system.rid'), nullable=False)
-    code = Column(String(3))
+    code = Column(String(5))
 
     def __repr__(self):
         state = inspect(self)
@@ -159,7 +159,7 @@ class OverflowItem(Base):
     src_branch_id = Column(Integer, ForeignKey('branch.rid'), nullable=False)
     src_branch_shelf_id = Column(
         Integer, ForeignKey('shelf_code.rid'), nullable=False)
-    dst_branch_id = Column(Integer, ForeignKey('branch.rid'), nullable=False)
+    dst_branch_id = Column(Integer, ForeignKey('branch.rid'))
     pub_date = Column(String(4))
     bib_created_date = Column(Date)
     item_created_date = Column(Date)
