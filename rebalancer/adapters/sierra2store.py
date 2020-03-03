@@ -37,11 +37,11 @@ import re
 from datastore import (session_scope, Audience, Branch, Language,
                        ItemType, OverflowItem, MatCat,
                        ShelfCode)
-from datastore_transactions import create_code_idx, insert
+from datastore_transactions import create_code_idx, insert, retrieve_record
 
 RowData = namedtuple(
     'RowData',
-    'bib_id, bib_created_date, title, author, pub_info, call_no, '
+    'bib_id, bib_created_date, title, author, pub_info, call_no,'
     'item_id, item_created_date, location, item_type, '
     'opac_msg, last_out_date, total_checkouts, total_renewals')
 
@@ -79,7 +79,7 @@ NYP_CALL_PATTERNS = OrderedDict(
 
 BPL_CALL_PATTERNS = OrderedDict(
     fi=re.compile(r'.*FIC\s', re.IGNORECASE),
-    pi=re.compile(r'.*\sJ-E\s|.*J-E$', re.IGNORECASE),
+    pi=re.compile(r'.*\sJ-E\s|.*J-E$|^J-E.*', re.IGNORECASE),
     d0=re.compile(r'^0\d{2}.*|.*\s0\d{2}.*', re.IGNORECASE),
     d1=re.compile(r'^1\d{2}.*|.*\s1\d{2}.*', re.IGNORECASE),
     d2=re.compile(r'^2\d{2}.*|.*\s2\d{2}.*', re.IGNORECASE),
@@ -92,6 +92,19 @@ BPL_CALL_PATTERNS = OrderedDict(
     d9=re.compile(r'^9\d{2}.*|.*\s9\d{2}.*', re.IGNORECASE),
     bi=re.compile(r'^B\s.*|\sB\s.*', re.IGNORECASE)
 )
+
+
+BPL_OPAC_MSGS = {
+    'l': 'lp',
+    'n': 'rm',
+    'y': 'st',
+    'k': 'yr',
+    'e': 'er',
+    'u': 'gn',
+    'm': 'my',
+    't': 'hi',
+    's': 'sf'
+}
 
 
 def prep_ids(sierra_id):
@@ -160,57 +173,55 @@ def string2date(date_string):
         return
 
 
+def parse_shelfcode(location):
+    try:
+        shelfcode = location[3:].strip()
+        if not shelfcode:
+            shelfcode = None
+    except TypeError:
+        shelfcode = None
+    return shelfcode
+
+
 def determine_bpl_mat_cat(call_no, location, opac_msg):
     mat_cat = None
-    shelfcode = location[3:].strip()
-    if shelfcode in ('fc', 'pb'):
-        if opac_msg == 's':
-            # science fiction
-            mat_cat = 'sf'
-        elif opac_msg == 'k':
-            # bridge book
-            mat_cat = 'yr'
-        elif opac_msg == 't':
-            # historical fiction
-            mat_cat = 'hi'
-        elif opac_msg == 'm':
-            # mystery
-            mat_cat = 'my'
-        elif opac_msg == 'n':
-            # romance
-            mat_cat = 'rm'
-        elif opac_msg == 'u':
-            # graphic novel
-            mat_cat = 'gn'
-        elif opac_msg == 'l':
-            # large print
-            mat_cat = 'lp'
-        else:
+    shelfcode = parse_shelfcode(location)
+
+    try:
+        mat_cat = BPL_OPAC_MSGS[opac_msg]
+    except KeyError:
+        pass
+
+    if mat_cat is None and shelfcode:
+        if shelfcode in ('fc', 'pb'):
             # general fiction
             mat_cat = 'fi'
-    elif shelfcode == 'sf':
-        mat_cat = 'sf'
-    elif shelfcode == 'my':
-        mat_cat = 'my'
-    elif shelfcode == 'lp':
-        mat_cat = 'lp'
-    elif shelfcode == 'je':
-        # picture books
-        mat_cat = 'pi'
-    elif shelfcode == 'er':
-        # easy reader
-        mat_cat = 'er'
-    elif shelfcode == 'bi':
-        # biography
-        mat_cat = 'bi'
-    elif shelfcode == 'dv':
-        # dvd
-        mat_cat = 'dv'
-    elif shelfcode == 'cd':
-        # cds
-        mat_cat = 'cd'
-    else:
-        print(call_no)
+        elif shelfcode == 'sf':
+            # science fiction
+            mat_cat = 'sf'
+        elif shelfcode == 'my':
+            # mystery
+            mat_cat = 'my'
+        elif shelfcode == 'lp':
+            # large print
+            mat_cat = 'lp'
+        elif shelfcode == 'je':
+            # picture books
+            mat_cat = 'pi'
+        elif shelfcode == 'er':
+            # easy reader
+            mat_cat = 'er'
+        elif shelfcode == 'bi':
+            # biography
+            mat_cat = 'bi'
+        elif shelfcode == 'dv':
+            # dvd
+            mat_cat = 'dv'
+        elif shelfcode == 'cd':
+            # cds
+            mat_cat = 'cd'
+
+    if mat_cat is None:
         for p, v in BPL_CALL_PATTERNS.items():
             m = v.search(call_no)
             if m:
@@ -230,7 +241,7 @@ def get_mat_cat_id(call_no, location, opac_msg, system_id, mat_cat_idx):
     if system_id == 1:
         # BPL
         mat_cat = determine_bpl_mat_cat(
-            call_no, location, opac_msg, mat_cat_idx)
+            call_no, location, opac_msg)
         mat_cat_id = mat_cat_idx[mat_cat]
     elif system_id == 2:
         # NYPL
@@ -241,7 +252,10 @@ def get_mat_cat_id(call_no, location, opac_msg, system_id, mat_cat_idx):
 
 
 def get_audience_id(location, audn_idx):
-    audn = location[2].strip()
+    try:
+        audn = location[2].strip()
+    except IndexError:
+        return audn_idx[None]
     try:
         return audn_idx[audn]
     except KeyError:
@@ -272,6 +286,24 @@ def string2int(amount):
         return 0
 
 
+def get_shelfcode_id(session, location, system_id):
+    shelfcode = parse_shelfcode(location)
+
+    shelfcode_record = retrieve_record(
+        session, ShelfCode, system_id=system_id, code=shelfcode)
+
+    # add code if not found
+    if shelfcode_record is None:
+        shelfcode_record = insert(
+            session,
+            ShelfCode,
+            system_id=system_id,
+            code=shelfcode)
+        session.flush()
+
+    return shelfcode_record.rid
+
+
 def sierra_export_reader(fh):
     reader = csv.reader(
         open(fh, 'r', encoding='utf-8', newline=''),
@@ -295,6 +327,8 @@ def save2store(fh, system_id):
         itemtype_idx = create_code_idx(session, ItemType, system_id=system_id)
 
         for element in data:
+            # parse source shelf code and store it
+            shelfcode_id = get_shelfcode_id(session, element.location, system_id)
 
             overflow_item = dict(
                 system_id=system_id,
@@ -304,9 +338,10 @@ def save2store(fh, system_id):
                 item_id=prep_ids(element.item_id),
                 src_branch_id=determine_branch_id(
                     element.location, branch_idx),
+                src_branch_shelf_id=shelfcode_id,
                 pub_date=parse_pub_date(element.pub_info),
                 bib_created_date=string2date(element.bib_created_date),
-                item_created_date=string2date(element.item_created_data),
+                item_created_date=string2date(element.item_created_date),
                 mat_cat_id=get_mat_cat_id(
                     element.call_no, element.location, element.opac_msg,
                     system_id, mat_cat_idx),

@@ -108,6 +108,12 @@ def test_get_audn_id():
         'mm3an', audn_idx) == 1  # is this a correct behavior? should we combine adult and unknown?
 
 
+def test_get_audn_id_when_empty_string():
+    audn_idx = {None: 1}
+    assert sierra2store.get_audience_id(
+        '', audn_idx) == 1
+
+
 def test_get_language_id():
     lang_idx = {
         None: 1,
@@ -358,6 +364,21 @@ def test_determine_bpl_mat_cat_for_empty_call_no_string():
         '', '87awl', '-') is None
 
 
+def test_determine_bpl_mat_cat_when_no_shelf_code():
+    assert sierra2store.determine_bpl_mat_cat(
+        'J 641.815 K', '03', 'u') == 'gn'
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC ADAMS', '41', '-') == 'fi'
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC ADAMS', '41', 's') == 'sf'
+    assert sierra2store.determine_bpl_mat_cat(
+        'B ADAMS C', '41', '-') == 'bi'
+    assert sierra2store.determine_bpl_mat_cat(
+        'J-E ADAMS', '02', '-') == 'pi'
+    assert sierra2store.determine_bpl_mat_cat(
+        'SPA FIC ADAMS', '41', '-') == 'fi'
+
+
 def test_determine_bpl_mat_cat_for_general_fiction():
     assert sierra2store.determine_bpl_mat_cat(
         'FIC ADAMS', '14afc', '-') == 'fi'
@@ -366,20 +387,22 @@ def test_determine_bpl_mat_cat_for_general_fiction():
     assert sierra2store.determine_bpl_mat_cat(
         'RUS J FIC LAGIN', '41awl', '-') == 'fi'
 
+
+def test_determine_bpl_mat_cat_for_short_stories():
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC WURZBACHER', '47ash', 'y') == 'st'
+
     # short stories treated as general ficiton
     assert sierra2store.determine_bpl_mat_cat(
-        'FIC WURZBACHER', '47ash', 'y') == 'fi'
-    assert sierra2store.determine_bpl_mat_cat(
-        'FIC C', '87afc', 'y') == 'fi'
-
-    # deck book
-    assert sierra2store.determine_bpl_mat_cat(
-        'FIC ASIMOV', '14adk', 's') == 'fi'
+        'FIC C', '87afc', 'y') == 'st'
 
 
 def test_determine_bpl_mat_cat_for_science_fiction():
     assert sierra2store.determine_bpl_mat_cat(
         'FIC COREY', '14asf', 's') == 'sf'
+    # deck book
+    assert sierra2store.determine_bpl_mat_cat(
+        'FIC ASIMOV', '14adk', 's') == 'sf'
 
 
 def test_determine_bpl_mat_cat_for_mystery():
@@ -400,10 +423,8 @@ def test_determine_bpl_mat_cat_for_graphic_novel():
     assert sierra2store.determine_bpl_mat_cat(
         'FIC PANETTA', '03yfc', 'u') == 'gn'
 
-
-def test_determine_bpl_mat_cat_for_incorrectly_coded_graphic_novel():
     assert sierra2store.determine_bpl_mat_cat(
-        'J 641.815 K', '03',  'u') == 'd6'
+        'J 641.815 K', '03', 'u') == 'gn'
 
 
 def test_determine_bpl_mat_cat_for_romances():
@@ -450,9 +471,106 @@ def test_determine_bpl_mat_cat_for_dvds():
         'DVD', '41adv', '-') == 'dv'
 
 
+def test_determine_bpl_mat_cat_for_cds():
+    assert sierra2store.determine_bpl_mat_cat(
+        'CD ORCH CHOPIN', '11acd', '-') == 'cd'
+
+
+def test_determine_bpl_mat_cat_for_dewey_0xx():
+    assert sierra2store.determine_bpl_mat_cat(
+        '005.42 B', '40anf', '-') == 'd0'
+
+
+def test_determine_bpl_mat_cat_for_dewey_1xx():
+    assert sierra2store.determine_bpl_mat_cat(
+        '158 B', '40anf', '-') == 'd1'
+    assert sierra2store.determine_bpl_mat_cat(
+        'CHI 158.12 B', '40awl', '-') == 'd1'
+
+
+def test_determine_bpl_mat_cat_for_dewey_2xx():
+    assert sierra2store.determine_bpl_mat_cat(
+        '248 B', '40anf', '-') == 'd2'
+    assert sierra2store.determine_bpl_mat_cat(
+        'CHI 248.12 B', '40awl', '-') == 'd2'
+
+
+def test_determine_bpl_mat_cat_for_dewey_3xx():
+    assert sierra2store.determine_bpl_mat_cat(
+        '364 B', '40anf', '-') == 'd3'
+    assert sierra2store.determine_bpl_mat_cat(
+        'CHI 355.12 B', '40awl', '-') == 'd3'
+
+
+def test_determine_bpl_mat_cat_for_dewey_4xx():
+    assert sierra2store.determine_bpl_mat_cat(
+        '400 B', '40anf', '-') == 'd4'
+    assert sierra2store.determine_bpl_mat_cat(
+        'CHI 400 B', '40awl', '-') == 'd4'
+
+
+def test_determine_bpl_mat_cat_for_dewey_5xx():
+    assert sierra2store.determine_bpl_mat_cat(
+        '500 B', '40anf', '-') == 'd5'
+    assert sierra2store.determine_bpl_mat_cat(
+        'CHI 500.092 B', '40awl', '-') == 'd5'
+
+
+def test_determine_bpl_mat_cat_for_dewey_6xx():
+    assert sierra2store.determine_bpl_mat_cat(
+        '623.4 B', '40anf', '-') == 'd6'
+    assert sierra2store.determine_bpl_mat_cat(
+        'CHI 600.92 B', '40awl', '-') == 'd6'
+
+
+def test_determine_bpl_mat_cat_for_dewey_7xx():
+    assert sierra2store.determine_bpl_mat_cat(
+        '700.092 B', '40anf', '-') == 'd7'
+    assert sierra2store.determine_bpl_mat_cat(
+        'CHI 700 B', '40awl', '-') == 'd7'
+
+
 def test_determine_bpl_mat_cat_for_dewey_8xx():
     assert sierra2store.determine_bpl_mat_cat(
         '823.33 B K', '14anf', '-') == 'd8'
     assert sierra2store.determine_bpl_mat_cat(
         '823 B', '14anf', '-') == 'd8'
 
+
+def test_determine_bpl_mat_cat_for_dewey_9xx():
+    assert sierra2store.determine_bpl_mat_cat(
+        '973 B', '40anf', '-') == 'd9'
+    assert sierra2store.determine_bpl_mat_cat(
+        'CHI 974.74 B', '40awl', '-') == 'd9'
+
+
+def test_get_mat_cat_id_for_bpl_unknown_material():
+    mat_cat_idx = {None: 1}
+    assert sierra2store.get_mat_cat_id(
+        '', '14', '-', 1, mat_cat_idx) == 1
+
+
+def test_get_mat_cat_id_for_nyp_unknown_material():
+    mat_cat_idx = {None: 1}
+    assert sierra2store.get_mat_cat_id(
+        '', 'mm', '-', 2, mat_cat_idx) == 1
+
+
+def test_parse_shelfcode_positive():
+    assert sierra2store.parse_shelfcode(
+        '14anf') == 'nf'
+
+
+def test_parse_shelfcode_when_missing():
+    assert sierra2store.parse_shelfcode(
+        '14') is None
+
+
+def test_parse_shelfcode_when_none():
+    assert sierra2store.parse_shelfcode(
+        None) is None
+
+
+def test_parse_shelfcode_when_empty_string():
+    assert sierra2store.parse_shelfcode(
+        '') is None
