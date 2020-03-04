@@ -37,9 +37,9 @@ def cat_headings_formating(tab_id, row_nos):
     }
 
 
-def branch_validation(tab_id):
+def branch_validation(tab_id, locations_number):
     values = [
-        {"userEnteredValue" : code} for code in BRANCH_CODES.keys() if code is not None]
+        {"userEnteredValue" : f"=Locations!$A$1:$A${locations_number}"}]
 
     return {
         "range": {
@@ -50,7 +50,7 @@ def branch_validation(tab_id):
         },
         "rule": {
             "condition": {
-                "type": 'ONE_OF_LIST',
+                "type": 'ONE_OF_RANGE',
                 "values": values
             },
             "inputMessage": 'invalid branch code',
@@ -60,9 +60,9 @@ def branch_validation(tab_id):
     }
 
 
-def shopping_cart_template(tab_id):
+def shopping_cart_data_tab_template(tab_id):
     """
-    encodes properies of Google Sheet tab
+    Encodes properies of Google Sheet tab
     args:
         tab_id: string, tab (sheet id)
     returns:

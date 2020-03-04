@@ -1,4 +1,4 @@
-# getting access token
+# Google Suit credentials
 
 import os
 import pickle

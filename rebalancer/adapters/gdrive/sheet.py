@@ -1,7 +1,10 @@
 from googleapiclient import discovery
 
 
-from adapters.gdrive.sheet_templates import shopping_cart_template, cat_headings_formating
+# from adapters.gdrive.sheet_templates import (
+#     shopping_cart_data_tab_template,
+#     cat_headings_formating
+# )
 
 
 def create_sheet(creds, sheet_name, tabs=[]):
@@ -106,18 +109,21 @@ def customize_shopping_sheet(creds, sheet_id, tabs):
 
     service = discovery.build('sheets', 'v4', credentials=creds)
 
-    header = [
+    data_header = [
         'category', 'author', 'title', 'call number',
-        'publication', 'subject', 'item #', 'new branch'
+        'pub date', 'link', 'item #', 'new branch'
     ]
+    location_header = ['location']
 
     value_input_option = 'RAW'
 
     # create tabs
     for tab in tabs:
-        body = {
-            'values': [header]
-        }
+        if tab == 'Location':
+            body = {'values': [location_header]}
+        else:
+            body = {'values': [data_header]}
+
         service.spreadsheets().values().append(
             spreadsheetId=sheet_id, range=tab,
             valueInputOption=value_input_option, body=body).execute()
@@ -125,17 +131,17 @@ def customize_shopping_sheet(creds, sheet_id, tabs):
     # get tab id and loop
     request = service.spreadsheets().get(
         spreadsheetId=sheet_id, ranges=tabs, includeGridData=False)
-    response = request.execute()
-    tab_ids = [
-        sheet['properties']['sheetId'] for sheet in response['sheets']]
+    res = request.execute()
+    sheet_tabs = [(s['properties']['title'], s['properties']['sheetId']) for s in res['sheets']]
 
     # customize the look & behavior of each sheet
-    for tab_id in tab_ids:
-        request_body = shopping_cart_template(tab_id)
+    for tab_name, tab_id in sheet_tabs:
+        if tab_name != 'Locations':
+            request_body = shopping_cart_data_tab_template(tab_id)
 
-        service.spreadsheets().batchUpdate(
-            spreadsheetId=sheet_id,
-            body=request_body).execute()
+            service.spreadsheets().batchUpdate(
+                spreadsheetId=sheet_id,
+                body=request_body).execute()
 
 
 def update_categories_formatting(creds, sheet_id, tabs, row_nos):
@@ -174,6 +180,3 @@ def get_properties(creds, sheet_id, values_range):
         includeGridData=includeGridData)
     response = request.execute()
     return response
-
-
-
