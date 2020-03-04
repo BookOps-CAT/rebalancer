@@ -42,6 +42,11 @@ def retrieve_record_cached(session, model, **kwargs):
     return instance
 
 
+def update_record(session, model, rid, **kwargs):
+    instance = session.query(model).filter_by(rid=rid).one()
+    for key, value in kwargs.items():
+        setattr(instance, key, value)
+
 
 # def insert_or_ignore(session, model, **kwargs):
 #     instance = session.query(model).filter_by(**kwargs).first()
@@ -54,12 +59,6 @@ def retrieve_record_cached(session, model, **kwargs):
 # def delete_record(session, model, **kwargs):
 #     instance = session.query(model).filter_by(**kwargs).one()
 #     session.delete(instance)
-
-
-# def update_record(session, model, rid, **kwargs):
-#     instance = session.query(model).filter_by(rid=rid).one()
-#     for key, value in kwargs.items():
-#         setattr(instance, key, value)
 
 
 # def insert_or_update(session, model, rid, **kwargs):
@@ -83,49 +82,43 @@ def retrieve_record_cached(session, model, **kwargs):
 #     return instance
 
 
-# def get_items4cart(session, audn_id, mat_cat_id, lang_id):
-#     # refactor for eng only
-#     if lang_id == 5:
-#         # 'eng' lang id
-#         lang_operator = '='
-#     else:
-#         # world lang ids
-#         lang_operator = '<>'
+def get_items4cart(session, system_id, audn_id, mat_cat_id, english_lang=True):
+    if english_lang:
+        # English materials
+        lang_operator = '='
+    else:
+        # world languages
+        lang_operator = '<>'
 
-#     stmn = f"""
-#         SELECT item.sid as iid,
-#                bib.sid as bid,
-#                branch.code as branch,
-#                status.code as status,
-#                item_type.code as item_type,
-#                mat_cat.code as mat_cat,
-#                audience.code as audn,
-#                language.code as lang,
-#                bib.author as author,
-#                bib.title as title,
-#                bib.pub_info as pub_info,
-#                bib.call_no as call_no,
-#                bib.subject as subject,
-#                hold.sid as hold_id
-#         FROM item
-#         JOIN bib ON item.bib_id = bib.sid
-#         JOIN hold ON item.sid = hold.item_id
-#         JOIN branch ON hold.src_branch_id = branch.sid
-#         JOIN status ON item.status_id = status.sid
-#         JOIN item_type ON item.item_type_id = item_type.sid
-#         JOIN mat_cat ON bib.mat_cat_id = mat_cat.sid
-#         JOIN audience ON bib.audn_id = audience.sid
-#         JOIN language ON bib.lang_id = language.sid
-#             WHERE hold.outstanding=:outstanding
-#                   AND mat_cat.sid=:mat_cat_id
-#                   AND audience.sid=:audn_id
-#                   AND language.sid{lang_operator}:lang_id
-#             ORDER BY bib.call_no, bib.author, bib.title;
-#     """
+    stmn = f"""
+        SELECT overflow_item.rid as rid,
+               overflow_item.item_id as iid,
+               overflow_item.bib_id as bid,
+               overflow_item.title as title,
+               overflow_item.author as author,
+               overflow_item.call_no as call_no,
+               overflow_item.pub_date as pub_date,
+               branch.code as branch,
+               mat_cat.code as mat_cat,
+               audience.code as audn,
+               language.code as lang
+        FROM overflow_item
+        JOIN branch ON overflow_item.src_branch_id = branch.rid
+        JOIN mat_cat ON overflow_item.mat_cat_id = mat_cat.rid
+        JOIN audience ON overflow_item.audn_id = audience.rid
+        JOIN language ON overflow_item.lang_id = language.rid
+            WHERE overflow_item.cart_id IS NULL
+                AND overflow_item.system_id=:system_id
+                AND mat_cat.rid=:mat_cat_id
+                AND audience.rid=:audn_id
+                AND language.code{lang_operator}'eng'
+            ORDER BY call_no, author, title;
+    """
 
-#     stmn = text(stmn)
-#     stmn = stmn.bindparams(
-#         outstanding=True, mat_cat_id=mat_cat_id,
-#         audn_id=audn_id, lang_id=lang_id)
-#     instances = session.execute(stmn)
-#     return instances
+    stmn = text(stmn)
+    stmn = stmn.bindparams(
+        system_id=system_id,
+        mat_cat_id=mat_cat_id,
+        audn_id=audn_id)
+    instances = session.execute(stmn)
+    return instances
