@@ -134,10 +134,10 @@ class MatCat(Base):
     system_id = Column(Integer, ForeignKey('system.rid'), nullable=False)
     code = Column(String(2))
     label = Column(String(100), nullable=False)
-    adult_order = Column(Integer)
-    teen_order = Column(Integer)
+    adults_order = Column(Integer)
+    teens_order = Column(Integer)
     kids_order = Column(Integer)
-    wl_order = Column(Integer)
+    wls_order = Column(Integer)
 
     def __repr__(self):
         state = inspect(self)
@@ -155,6 +155,7 @@ class OverflowItem(Base):
     bib_id = Column(Integer, nullable=False)
     title = Column(String(200), nullable=False)
     author = Column(String(150))
+    call_no = Column(String(150))
     item_id = Column(Integer, nullable=False)
     src_branch_id = Column(Integer, ForeignKey('branch.rid'), nullable=False)
     src_branch_shelf_id = Column(

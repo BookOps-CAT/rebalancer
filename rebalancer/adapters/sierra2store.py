@@ -328,13 +328,15 @@ def save2store(fh, system_id):
 
         for element in data:
             # parse source shelf code and store it
-            shelfcode_id = get_shelfcode_id(session, element.location, system_id)
+            shelfcode_id = get_shelfcode_id(
+                session, element.location, system_id)
 
             overflow_item = dict(
                 system_id=system_id,
                 bib_id=prep_ids(element.bib_id),
                 title=prep_title(element.title),
                 author=prep_author(element.author),
+                call_no=element.call_no.strip(),
                 item_id=prep_ids(element.item_id),
                 src_branch_id=determine_branch_id(
                     element.location, branch_idx),
