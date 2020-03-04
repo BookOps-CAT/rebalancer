@@ -7,4 +7,7 @@ sys.path.insert(0, p)
 
 
 from rebalancer import errors
-from rebalancer.adapters import sierra2store
+from rebalancer.adapters import (
+    sierra2store,
+    store2sheet
+)
