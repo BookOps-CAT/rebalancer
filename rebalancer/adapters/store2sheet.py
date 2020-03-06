@@ -4,16 +4,28 @@ import os
 import json
 from datetime import datetime
 
-from datastore import session_scope, Cart, MatCat
-from datastore_transactions import insert
+from datastore import (
+    session_scope,
+    Audience,
+    Branch, Cart,
+    MatCat,
+    OverflowItem
+)
+from datastore_transactions import (
+    insert,
+    count_records,
+    get_relevant_lang_recs,
+    retrieve_records_ordered_by_code
+)
 
 
 from adapters.gdrive.credentials import get_access_token
 from adapters.gdrive.sheet import (
     create_sheet,
     file2folder,
-    customize_shopping_sheet)
-#   append2sheet, update_categories_formatting)
+    customize_shopping_sheet,
+    append2sheet,
+    update_categories_formatting)
 from datastore_transactions import (
     get_items4cart,
     retrieve_records,
@@ -36,15 +48,15 @@ def name_cart():
     return f'Rebalancing Cart {datetime.now().strftime("%B %Y")}'
 
 
-def save_cart_id(sheet_id, system_id):
+def save_cart_info(sheet_id, system_id):
     with session_scope() as session:
         rec = insert(
             session,
             Cart,
-            system_id,
-            google_sheet_id=sheet_id)
+            system_id=system_id,
+            shopping_cart_id=sheet_id)
         session.flush()
-        return(rec.sid)
+        return(rec.rid)
 
 
 def order_categories(session, system_id, tab):
@@ -67,57 +79,105 @@ def order_categories(session, system_id, tab):
     return ordered_cats
 
 
-def populate_tab(creds, system_id, cart_id, sheet_id, tab_name, lang):
-    if tab_name == 'Adult':
-        audn_id = AUDN_CODES['a'][0]
-    elif tab_name == 'Teens':
-        audn_id = AUDN_CODES['y'][0]
-    elif tab_name == 'Kids':
-        audn_id = AUDN_CODES['j'][0]
-    elif tab_name == 'WL':
-        pass
-    else:
-        raise AttributeError('Invalid tab provided')
+def get_total_number_of_branches(system_id):
+    with session_scope() as session:
+        branch_count = count_records(session, Branch, system_id=system_id)
+        return branch_count
 
-    lang_id = LANG_CODES['eng'][0]
+
+def audience_label_idx():
+    with session_scope() as session:
+        audn_recs = retrieve_records(session, Audience)
+        audn_idx = {a.label: a.rid for a in audn_recs}
+
+        return audn_idx
+
+
+def populate_branch_tab(creds, system_id, sheet_id):
+    data = []
+    with session_scope() as session:
+        branch_records = retrieve_records_ordered_by_code(
+            session, Branch, system_id=system_id)
+        for record in branch_records:
+            if record.code:
+                data.append([record.code])
+    append2sheet(creds, sheet_id, 'branch codes', data)
+
+
+def populate_data_tab(
+    creds,
+    system_id,
+    cart_id,
+    sheet_id,
+    tab_name,
+):
 
     data = []
     cat_heading_rows = []
 
     with session_scope() as session:
         row = 0
-        for cat_id, label in CATS_BY_AUDN[tab_name].items():
-            row += 1
-            cat_heading_rows.append(row)
-            records = []
-            if tab_name == 'World Lang':
-                # WL must have it's own datastore query
-                # group by language, then category
-                # each language should have additional heading
-                # data.append(label)
-                # for audn_id in AUDN_CODES.keys()
-                pass
-            else:
+        audn_idx = audience_label_idx()
+        if system_id == 1:
+            url = 'http://iii.brooklynpubliclibrary.org/record=b'
+        elif system_id == 2:
+            url = 'http://ilsstaff.nypl.org/record=b'
+        if tab_name == 'World Lang':
+            ordered_langs = get_relevant_lang_recs(session, system_id)
+
+            for _, lang_code, lang_label in ordered_langs:
+
+                row += 1
+                cat_heading_rows.append(row)
+                data.append([lang_label])
+                records = get_items4cart(
+                    session,
+                    system_id,
+                    None,
+                    None,
+                    lang_code=lang_code)
+
+                for r in records:
+                    row += 1
+                    link = f'=HYPERLINK("{url}{r.bid}", "see")'
+                    data.append([
+                        None, r.author, r.title, r.call_no,
+                        r.pub_date, link, r.iid])
+                    update_record(
+                        session, OverflowItem, r.rid,
+                        cart_id=cart_id)
+
+        else:
+            ordered_cats = order_categories(session, system_id, tab_name)
+            lang_code = 'eng'
+
+            for mat_cat_id, label in ordered_cats:
+                row += 1
+                cat_heading_rows.append(row)
+
+                # get and prep record
                 data.append([label])
+                audn_id = audn_idx[tab_name]
                 records = get_items4cart(
                     session,
                     system_id,
                     audn_id,
                     mat_cat_id,
-                    english_lang=english_lang)
-            for r in records:
-                row += 1
-                data.append([
-                    None, r.author, r.title, r.call_no,
-                    r.pub_info, r.subject, r.iid])
-                update_record(
-                    session, Hold, r.hold_id,
-                    cart_id=cart_id)
+                    lang_code=lang_code)
+
+                for r in records:
+                    row += 1
+                    link = f'=HYPERLINK("{url}{r.bid}", "see")'
+                    data.append([
+                        None, r.author, r.title, r.call_no,
+                        r.pub_date, link, r.iid])
+                    update_record(
+                        session, OverflowItem, r.rid,
+                        cart_id=cart_id)
     if data:
-        # append2sheet(creds, sheet_id, tab_name, data)
-        # update_categories_formatting(
-        #     creds, sheet_id, tab_name, cat_heading_rows)
-        pass
+        append2sheet(creds, sheet_id, tab_name, data)
+        update_categories_formatting(
+            creds, sheet_id, tab_name, cat_heading_rows)
 
 
 def create_shopping_cart(system_id):
@@ -125,13 +185,17 @@ def create_shopping_cart(system_id):
     Creates a google sheets and approabs and moves it to
     shared folder
     """
-    tabs = ['Adult', 'Teens', 'Kids', 'World Lang', 'Locations']
+    tabs = ['Adults', 'Teens', 'Kids', 'World Lang', 'branch codes']
     creds = get_access_token()
     cart_name = name_cart()
     sheet_id = create_sheet(creds, cart_name, tabs)
     folder_id = get_gdrive_folder_id()
     file2folder(creds, folder_id, sheet_id)
-    customize_shopping_sheet(creds, sheet_id, tabs)
-    cart_id = save_cart_id(sheet_id, system_id)
-    # for tab in tabs:
-    #     populate_tab(creds, cart_id, sheet_id, tab, 'eng')
+    branch_count = get_total_number_of_branches(system_id)
+    customize_shopping_sheet(creds, sheet_id, tabs, branch_count)
+    cart_id = save_cart_info(sheet_id, system_id)
+    for tab in tabs:
+        if tab == 'branch codes':
+            populate_branch_tab(creds, system_id, sheet_id)
+        else:
+            populate_data_tab(creds, system_id, cart_id, sheet_id, tab)

@@ -1,5 +1,4 @@
-from data.branches import BRANCH_CODES
-from data.editors import EDITORS
+import json
 
 
 def format_row(tab_id, row_no):
@@ -31,20 +30,32 @@ def format_row(tab_id, row_no):
     }
 
 
+def get_editors():
+    """
+    args:
+        editors: list, list of gmail addresses of authorized editors
+    returns:
+        users_dict: dict, dictionary of users formatted for google sheet API
+    """
+    with open('./data/editors.json', 'r') as jsonfile:
+        editors = json.load(jsonfile)
+        return editors
+
+
 def cat_headings_formating(tab_id, row_nos):
     return {
         "requests": [format_row(tab_id, n) for n in row_nos]
     }
 
 
-def branch_validation(tab_id, locations_number):
+def branch_validation(tab_id, branch_count):
     values = [
-        {"userEnteredValue" : f"=Locations!$A$1:$A${locations_number}"}]
+        {"userEnteredValue" : f"='branch codes'!$A$2:$A${branch_count + 1}"}]
 
     return {
         "range": {
             "sheetId": tab_id,
-            "startRowIndex": 1,
+            "startRowIndex": 2,
             "startColumnIndex": 7,
             "endColumnIndex": 8,
         },
@@ -60,9 +71,50 @@ def branch_validation(tab_id, locations_number):
     }
 
 
-def shopping_cart_data_tab_template(tab_id):
+def shopping_cart_validation_tab_template(tab_id):
     """
-    Encodes properies of Google Sheet tab
+    Encodes proprerties of Google Sheet validation tab
+    args:
+        tab_id: string, tab id
+    returns:
+        body: dictionary, request body
+    """
+
+    return {
+        "requests": [
+            {
+                'updateSheetProperties': {
+                    'properties': {
+                        'sheetId': tab_id,
+                        'hidden': True,
+                    },
+                    'fields': 'hidden'
+                },
+            },
+            {
+                "addProtectedRange": {
+                    "protectedRange": {
+                        "range": {
+                            "sheetId": tab_id,
+                            "endColumnIndex": 0,
+                            "endColumnIndex": 1
+                        },
+                        "description": "admin edits only",
+                        "warningOnly": False,
+                        "requestingUserCanEdit": False,
+                        "editors": get_editors()
+                    }
+                }
+            },
+        ],
+        'includeSpreadsheetInResponse': False,
+        'responseIncludeGridData': False
+    }
+
+
+def shopping_cart_data_tab_template(tab_id, branch_count):
+    """
+    Encodes properies of Google Sheet data tabs
     args:
         tab_id: string, tab (sheet id)
     returns:
@@ -112,7 +164,7 @@ def shopping_cart_data_tab_template(tab_id):
                         "ranges": [
                             {
                                 "sheetId": tab_id,
-                                "startRowIndex": 1,
+                                "startRowIndex": 2,
                                 "startColumnIndex": 7,
                                 "endColumnIndex": 8
                             }
@@ -136,7 +188,7 @@ def shopping_cart_data_tab_template(tab_id):
                 }
             },
             {
-                "setDataValidation": branch_validation(tab_id)
+                "setDataValidation": branch_validation(tab_id, branch_count)
             },
             {
                 "addProtectedRange": {
@@ -149,7 +201,7 @@ def shopping_cart_data_tab_template(tab_id):
                         "description": "admin edits only",
                         "warningOnly": False,
                         "requestingUserCanEdit": False,
-                        "editors": EDITORS
+                        "editors": get_editors()
                     }
                 }
             },
@@ -162,7 +214,7 @@ def shopping_cart_data_tab_template(tab_id):
                         "endIndex": 1
                     },
                     "properties": {
-                        "pixelSize": 150
+                        "pixelSize": 100
                     },
                     "fields": "pixelSize"
                 }
@@ -190,7 +242,7 @@ def shopping_cart_data_tab_template(tab_id):
                         "endIndex": 3
                     },
                     "properties": {
-                        "pixelSize": 300
+                        "pixelSize": 400
                     },
                     "fields": "pixelSize"
                 }
@@ -204,7 +256,7 @@ def shopping_cart_data_tab_template(tab_id):
                         "endIndex": 4
                     },
                     "properties": {
-                        "pixelSize": 150
+                        "pixelSize": 250
                     },
                     "fields": "pixelSize"
                 }
@@ -218,7 +270,7 @@ def shopping_cart_data_tab_template(tab_id):
                         "endIndex": 5
                     },
                     "properties": {
-                        "pixelSize": 200
+                        "pixelSize": 75
                     },
                     "fields": "pixelSize"
                 }
@@ -232,7 +284,7 @@ def shopping_cart_data_tab_template(tab_id):
                         "endIndex": 6
                     },
                     "properties": {
-                        "pixelSize": 200
+                        "pixelSize": 50
                     },
                     "fields": "pixelSize"
                 }

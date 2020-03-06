@@ -1,10 +1,13 @@
+import json
+
 from googleapiclient import discovery
 
 
-# from adapters.gdrive.sheet_templates import (
-#     shopping_cart_data_tab_template,
-#     cat_headings_formating
-# )
+from adapters.gdrive.sheet_templates import (
+    shopping_cart_data_tab_template,
+    shopping_cart_validation_tab_template,
+    cat_headings_formating
+)
 
 
 def create_sheet(creds, sheet_name, tabs=[]):
@@ -45,6 +48,10 @@ def create_sheet(creds, sheet_name, tabs=[]):
 
 def file2folder(creds, parent_id, file_id):
     """
+
+    !!!ADD system_id FOR HANDLING BOTH SYSTEMS!!
+
+
     move file with provided id to appropriate folder
     args:
         auth: instance of google.oauth2.credentials.Credentials class
@@ -88,7 +95,7 @@ def append2sheet(creds, sheet_id, tab_name, data):
     """
 
     service = discovery.build('sheets', 'v4', credentials=creds)
-    value_input_option = 'RAW'
+    value_input_option = 'USER_ENTERED'
     body = {
         'values': data,
     }
@@ -99,7 +106,7 @@ def append2sheet(creds, sheet_id, tab_name, data):
     return result
 
 
-def customize_shopping_sheet(creds, sheet_id, tabs):
+def customize_shopping_sheet(creds, sheet_id, tabs, branch_count):
     """
     applies structure and formatting to the shopping sheet
     args:
@@ -113,13 +120,13 @@ def customize_shopping_sheet(creds, sheet_id, tabs):
         'category', 'author', 'title', 'call number',
         'pub date', 'link', 'item #', 'new branch'
     ]
-    location_header = ['location']
+    location_header = ['branch codes']
 
     value_input_option = 'RAW'
 
     # create tabs
     for tab in tabs:
-        if tab == 'Location':
+        if tab == 'branch codes':
             body = {'values': [location_header]}
         else:
             body = {'values': [data_header]}
@@ -132,16 +139,20 @@ def customize_shopping_sheet(creds, sheet_id, tabs):
     request = service.spreadsheets().get(
         spreadsheetId=sheet_id, ranges=tabs, includeGridData=False)
     res = request.execute()
-    sheet_tabs = [(s['properties']['title'], s['properties']['sheetId']) for s in res['sheets']]
+    sheet_tabs = [
+        (s['properties']['title'], s['properties']['sheetId']) for s in res['sheets']]
 
     # customize the look & behavior of each sheet
     for tab_name, tab_id in sheet_tabs:
-        if tab_name != 'Locations':
-            request_body = shopping_cart_data_tab_template(tab_id)
+        if tab_name == 'branch codes':
+            request_body = shopping_cart_validation_tab_template(tab_id)
+        else:
+            request_body = shopping_cart_data_tab_template(
+                tab_id, branch_count)
 
-            service.spreadsheets().batchUpdate(
-                spreadsheetId=sheet_id,
-                body=request_body).execute()
+        service.spreadsheets().batchUpdate(
+            spreadsheetId=sheet_id,
+            body=request_body).execute()
 
 
 def update_categories_formatting(creds, sheet_id, tabs, row_nos):
